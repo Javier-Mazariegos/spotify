@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Artista</th>
+                <th scope="col">Album</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for x in range[0,10000] %}
+                {% if my_list.next == indice %}
+                    <tr>
+                        <th scope="col">{{my_list.nombre}}</th>  
+                        <th scope="col">{{my_list.artista}}</th>
+                        <th scope="col">{{my_list.album}}</th> 
+                    </tr>
+                    {% my_list = my_list.next %}
+                {% endif %}
+                {% if my_list.next != indice %}
+                    {% set x = 10000 %}
+                {% endif %}
+            {% endfor %}
+            <tr>
+                <th scope="col">{{my_list.nombre}}</th>  
+                <th scope="col">{{my_list.artista}}</th>
+                <th scope="col">{{my_list.album}}</th> 
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
