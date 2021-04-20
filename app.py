@@ -3,43 +3,20 @@ from flask import Flask, request
 from jinja2 import Template, Environment, FileSystemLoader
 import csv
 import cProfile
-class Cancion:
-    def __init__(self, nombre, artista, album):
-        self.nombre = nombre
-        self.artista = artista
-        self.album = album
-        self.previous = None
-        self.next = None
+from linkedlist import Cancion, LinkedList
 
-class LinkedList:
-    def __init__(self):
-        self.head = None
+listadoCanciones = LinkedList()
+listaCanciones = []
+indice = listadoCanciones.head
+cargarCanciones()
+cancionActual = listadoCanciones.head
 
-    @profile
-    def insertar(self,nombre,artista,album):
-        global indice 
-        nuevaCancion = Cancion(nombre,artista,album)
-        nuevaCancion.next = None
-        if self.head is None:
-            self.head = nuevaCancion
-            return
-        last = self.head
-        while (last.next is not None):
-            last = last.next
-        last.next = nuevaCancion
-        nuevaCancion.previous = last
-        nuevaCancion.next = indice
-        return
+File_loader = FileSystemLoader("templates")
+env = Environment(loader=File_loader)
+app = Flask(__name__)
 
-    @profile
-    def recorrer(self,cancion):  
-        global last      
-        while (cancion is not None):
-            print(cancion.nombre,cancion.artista,cancion.album),
-            last = cancion
-            cancion = cancion.next   
 
-@profile
+
 def añadirCancion(nombre,artista,album)-> None:
     datos = ["","",""]
     datos[0] = nombre
@@ -52,7 +29,7 @@ def añadirCancion(nombre,artista,album)-> None:
     listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
     listadoCanciones.insertar(datos[0],datos[1],datos[2])
 
-@profile
+
 def cargarCanciones():
     global listadoCanciones
     with open('listado.csv') as File:
@@ -65,21 +42,14 @@ def cargarCanciones():
             listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
             listadoCanciones.insertar(datos[0],datos[1],datos[2])
 
-listadoCanciones = LinkedList()
-listaCanciones = []
-indice = listadoCanciones.head
-cargarCanciones()
-cancionActual = listadoCanciones.head
 
-File_loader = FileSystemLoader("templates")
-env = Environment(loader=File_loader)
-app = Flask(__name__)
-
+#principal
 @app.route('/', methods=["GET","POST"], endpoint='index')
-@profile
 def index():
-    global cancionActual, listadoCanciones
+    global cancionActual, listaCanciones, listadoCanciones
     contador = 0 
+
+    #cambiar cancion
     if(request.method == "POST"):
         if request.form.get('Play Previous') == 'Play Previous':
             if(cancionActual.previous is None):
@@ -91,15 +61,34 @@ def index():
                 pass
             else:
                 cancionActual = cancionActual.next
+        elif request.form.get('play nueva') == 'play nueva':
+            cancion_nueva = request.form.get('nombre cancion')
+            cancion = listadoCanciones.head
+            while (True):
+                if cancion.next is not None:
+                    if cancion_nueva == cancion.nombre:
+                        cancionActual = cancion
+                        nombreCancion = cancionActual.nombre
+                        
+                else:
+                    break
+
+
+
         else:
             pass
         template = env.get_template('index.html')
         return template.render(nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album )
+
+    
+
     template = env.get_template('index.html')
-    return template.render(nombreCancion="---",nombreArtista="---",nombreAlbum="---")
+    return template.render(listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---")
+
+
+
 
 @app.route('/añadir', methods=["GET","POST"], endpoint='añadir')
-@profile
 def añadir():
     if(request.method == "POST"):
         nombre = request.form['var1']
@@ -109,8 +98,10 @@ def añadir():
     template = env.get_template('añadir.html')
     return template.render()
 
+
+
+
 @app.route('/listar', endpoint='listar')
-@profile
 def listar():
     #limpiarListado()
     #cargarCanciones()
