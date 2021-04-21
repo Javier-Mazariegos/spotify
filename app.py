@@ -63,17 +63,17 @@ def index():
                 cancionActual = cancionActual.next
         elif request.form.get('play nueva') == 'play nueva':
             cancion_nueva = request.form.get('nombre cancion')
-            cancion = listadoCanciones.head
-            while (True):
-                if cancion.next is not None:
-                    if cancion_nueva == cancion.nombre:
-                        cancionActual = cancion
-                        nombreCancion = cancionActual.nombre
-                        
-                else:
-                    break
-
-
+            if cancionActual != cancion_nueva:    
+                cancion = listadoCanciones.head
+                while (True):
+                    if cancion.next is not None:
+                        if cancion_nueva == cancion.nombre:
+                            cancionActual = cancion
+                            break    
+                    else:
+                        break
+            else:
+                pass
 
         else:
             pass
