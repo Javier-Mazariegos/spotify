@@ -105,7 +105,7 @@ def index():
         elif request.form.get('play') == 'play':
             cancionActual = listadoCanciones.head
             ultimaCancion = cancionActual
-            colaCanciones.enqueue(Cancion("Levitating", "Dua Lipa", "Future Nostalgia"))
+            #colaCanciones.enqueue(Cancion("Levitating", "Dua Lipa", "Future Nostalgia"))
         else:
             pass
         template = env.get_template('index.html')
