@@ -21,6 +21,6 @@ class Queue:
         if self.is_empty1():
             return("Queue Underflow")
         else:
-            x = self.head.data
+            x = self.head
             self.head = self.head.next
             return x

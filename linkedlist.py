@@ -10,16 +10,17 @@ class LinkedList:
     def __init__(self):
         self.head = None
 
-    def insertar(self,nombre,artista,album):
-        nuevaCancion = Cancion(nombre,artista,album)
-        nuevaCancion.next = None
+    def __iter__(self):
+        node = self.head
+        while node is not None:
+            yield node
+            node = node.next
+
+    def insertar(self, cancion):
         if self.head is None:
-            self.head = nuevaCancion
-            return
-        last = self.head
-        while (last.next is not None):
-            last = last.next
-        last.next = nuevaCancion
-        nuevaCancion.previous = last
-        nuevaCancion.next = self.head
-        return
+            self.head = cancion
+        else:
+            for current_node in self:
+                pass
+            current_node.next = cancion
+            cancion.previous = current_node
