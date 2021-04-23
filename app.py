@@ -30,6 +30,10 @@ def añadirCancion(nombre,artista,album)-> None:
     listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
     listadoCanciones.insertar(datos[0],datos[1],datos[2])
 
+def eliminarCancion():
+    with open('listado.csv') as File:
+        writer = csv.writer(writeFile, delimiter=",", quotechar=',',quoting=csv.QUOTE_MINIMAL,lineterminator='')
+        
 
 def cargarCanciones():
     global listadoCanciones, listaCanciones
@@ -43,6 +47,35 @@ def cargarCanciones():
             listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
             listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
 
+def deletequeue(cancion_eliminar, cancion):
+    contador = 0
+    while (True):
+        if contador == 1:
+            cancion_comprobacion = colaCanciones.head.nombre
+        if cancion.next is not None:
+            if cancion_eliminar == colaCanciones.head.nombre:
+                colaCanciones.dequeue
+                break
+            if cancion_eliminar == cancion.nombre.nombre:
+                cancion_comprobacion.next = cancion.next
+                break
+            else:
+                cancion = cancion.next
+                contador+=1
+                if contador >= 1:
+                    cancion_comprobacion = cancion.next
+
+def deletelist(cancion_eliminar, cancion):
+    while (True):
+        if cancion.next is not None:
+            if cancion_eliminar == listadoCanciones.head.nombre:
+                listadoCanciones.head = cancion.next
+                break
+            if cancion_eliminar == cancion.nombre:
+                cancion.previous.next = cancion.next
+                break
+            else:
+                cancion = cancion.next
 
 cargarCanciones()
 #principal
@@ -106,8 +139,19 @@ def index():
             cancionActual = listadoCanciones.head
             ultimaCancion = cancionActual
             #colaCanciones.enqueue(Cancion("Levitating", "Dua Lipa", "Future Nostalgia"))
+        elif request.form.get('delete_queue') == 'delete_queue':
+            cancion_eliminar = request.form.get('nombre cancion')
+            cancion = colaCanciones.head
+            deletequeue(cancion_eliminar, cancion)
+        elif request.form.get('delete_list') == 'delete_list':
+            cancion_eliminar = request.form.get('nombre cancion')
+            cancion = listadoCanciones.head
+            deletequeue(cancion_eliminar, colaCanciones.head)
+            deletelist(cancion_eliminar, cancion)
+
         else:
             pass
+
         template = env.get_template('index.html')
         return template.render(listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album )
     template = env.get_template('index.html')
