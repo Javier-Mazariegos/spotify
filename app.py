@@ -99,6 +99,9 @@ def añadir():
     return template.render()
 
 
+#eliminar cancion y ver si esta en la cola
+#agregar a la cola
+
 
 
 @app.route('/listar', endpoint='listar')
