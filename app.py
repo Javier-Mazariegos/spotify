@@ -141,7 +141,7 @@ cargarCanciones()
 def index():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     contador = 0 
-
+    css = url_for('static', filename='micss.css')
     #cambiar cancion
     if(request.method == "POST"):
         if request.form.get('Play Previous') == 'Play Previous':
@@ -221,8 +221,7 @@ def index():
             pass
 
         template = env.get_template('spoti.html')
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album )
-    css = url_for('static', filename='micss.css')
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album,style_sheet=css )
     template = env.get_template('spoti.html')
     return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---", style_sheet=css)
 
