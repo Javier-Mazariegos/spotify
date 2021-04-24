@@ -182,36 +182,6 @@ def index():
     template = env.get_template('index.html')
     return template.render(listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---")
 
-
-
-
-@app.route('/añadir', methods=["GET","POST"], endpoint='añadir')
-def añadir():
-    if(request.method == "POST"):
-        nombre = request.form['var1']
-        artista = request.form['var2']
-        album = request.form['var3']
-        añadirCancion(nombre,artista,album)
-    template = env.get_template('añadir.html')
-    return template.render()
-
-
-#eliminar cancion y ver si esta en la cola
-#agregar a la cola
-
-
-
-@app.route('/listar', endpoint='listar')
-def listar():
-    #limpiarListado()
-    #cargarCanciones()
-    template = env.get_template('listar.html')
-    return template.render(my_list=listadoCanciones.head, indice = indice)
-
-
-
-
-
 if __name__ == '__main__':
     app.run(debug=True)
 
