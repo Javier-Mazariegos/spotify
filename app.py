@@ -173,7 +173,11 @@ def index():
             cancion = listadoCanciones.head
             deletequeue(cancion_eliminar, colaCanciones.head)
             deletelist(cancion_eliminar, cancion)
-
+        elif request.form.get('añadir_cancion') == 'añadir_cancion':
+            nombre_cancion = request.form.get('nombre')
+            artista = request.form.get('artista')
+            album = request.form.get('album')
+            añadirCancion(nombre_cancion,artista,album)
         else:
             pass
 
