@@ -1,3 +1,4 @@
+from flask.helpers import url_for
 from memory_profiler import profile
 from flask import Flask, request
 from jinja2 import Template, Environment, FileSystemLoader
@@ -183,8 +184,9 @@ def index():
 
         template = env.get_template('index.html')
         return template.render(listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album )
-    template = env.get_template('index.html')
-    return template.render(listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---")
+    css = url_for('static', filename='micss.css')
+    template = env.get_template('spoti.html')
+    return template.render(listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---", style_sheet=css)
 
 if __name__ == '__main__':
     app.run(debug=True)
