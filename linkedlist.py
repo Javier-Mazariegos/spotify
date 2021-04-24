@@ -16,6 +16,15 @@ class LinkedList:
             yield node
             node = node.next
 
+    def __repr__(self):
+        node = self.head
+        nodes = []
+        while node is not None:
+            nodes.append(node.nombre)
+            node = node.next
+        nodes.append("None")
+        return " --> ".join(nodes)
+
     def insertar(self, cancion):
         if self.head is None:
             self.head = cancion

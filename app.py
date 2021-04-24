@@ -14,7 +14,8 @@ app = Flask(__name__)
 listadoCanciones = LinkedList()
 colaCanciones = Queue()
 listaCanciones = []
-cancionActual = listadoCanciones.head
+colaLista = []
+cancionActual = " "
 ultimaCancion = None
 
 
@@ -65,25 +66,58 @@ def cargarCanciones():
             listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
             listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
 
+def cola_a_Lista():
+    global colaLista, colaCanciones
+    colaLista = []
+    if colaCanciones.is_empty1() == False:
+        currentNode = colaCanciones.head
+        while (True):
+            if currentNode.next is not None or colaCanciones.is_empty1() == False:
+                colaLista.append(currentNode)
+                if currentNode.next is not None:
+                    currentNode = currentNode.next
+                else:
+                    break
+            else:
+                break
+def actulizarListaCanciones():
+    global listadoCanciones, listaCanciones
+    listaCanciones = []
+    if listadoCanciones.head is not None:
+        currentNode = listadoCanciones.head
+        while(True):
+            if currentNode.next != listadoCanciones.head or currentNode.next is not None or currentNode == listadoCanciones.head:
+                listaCanciones.append(currentNode)
+                if currentNode.next is not None:
+                    currentNode = currentNode.next
+                else:
+                    break
+            else:
+                break
+        
+
+
 def deletequeue(cancion_eliminar, cancion):
+    global colaCanciones
     contador = 0
     while (True):
-        if cancion_eliminar == colaCanciones.head.nombre:
+        if cancion is not None:
+            if cancion_eliminar == colaCanciones.head.nombre:
                 colaCanciones.dequeue()
                 break
-        if contador == 1:
-            cancion_comprobacion = colaCanciones.head.nombre
-        if cancion.next is not None:
+            if contador == 1:
+                cancion_comprobacion = colaCanciones.head
             if cancion_eliminar == cancion.nombre:
                 cancion_comprobacion.next = cancion.next
                 break
             else:
                 cancion = cancion.next
-                contador+=1
-                if contador >= 1:
+                if contador >=1:
                     cancion_comprobacion = cancion_comprobacion.next
+                contador = contador + 1
         else:
             break
+    cola_a_Lista()
 
 def deletelist(cancion_eliminar, cancion):
     while (True):
@@ -105,7 +139,7 @@ cargarCanciones()
 #principal
 @app.route('/', methods=["GET","POST"], endpoint='index')
 def index():
-    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     contador = 0 
 
     #cambiar cancion
@@ -158,10 +192,12 @@ def index():
                         break
                     else:
                         cancion = cancion.next
+            cola_a_Lista()
         #se reproduce la primera cancion
         elif request.form.get('play') == 'play':
-            cancionActual = listadoCanciones.head
-            ultimaCancion = cancionActual
+            if cancionActual == " ":
+                cancionActual = listadoCanciones.head
+                ultimaCancion = cancionActual
             #xCancion = Cancion("Levitating", "Dua Lipa", "Future Nostalgia")
             #colaCanciones.enqueue(xCancion)
             #deletequeue(xCancion.nombre, colaCanciones.head)
@@ -169,11 +205,13 @@ def index():
             cancion_eliminar = request.form.get('nombre cancion')
             cancion = colaCanciones.head
             deletequeue(cancion_eliminar, cancion)
+            cola_a_Lista()
         elif request.form.get('delete_list') == 'delete_list':
             cancion_eliminar = request.form.get('nombre cancion')
             cancion = listadoCanciones.head
             deletequeue(cancion_eliminar, colaCanciones.head)
             deletelist(cancion_eliminar, cancion)
+            actulizarListaCanciones()
         elif request.form.get('añadir_cancion') == 'añadir_cancion':
             nombre_cancion = request.form.get('nombre')
             artista = request.form.get('artista')
@@ -182,11 +220,11 @@ def index():
         else:
             pass
 
-        template = env.get_template('index.html')
-        return template.render(listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album )
+        template = env.get_template('spoti.html')
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album )
     css = url_for('static', filename='micss.css')
     template = env.get_template('spoti.html')
-    return template.render(listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---", style_sheet=css)
+    return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---", style_sheet=css)
 
 if __name__ == '__main__':
     app.run(debug=True)
