@@ -21,6 +21,7 @@ ultimaCancion = None
 
 
 def añadirCancion(nombre,artista,album)-> None:
+    global listadoCanciones
     datos = ["","",""]
     datos[0] = nombre
     datos[1] = artista
@@ -29,8 +30,8 @@ def añadirCancion(nombre,artista,album)-> None:
         writer = csv.writer(writeFile,delimiter=",",quotechar=',',quoting=csv.QUOTE_MINIMAL,lineterminator='')
         writer.writerow('\n')
         writer.writerow(datos)
-    listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
-    listadoCanciones.insertar(datos[0],datos[1],datos[2])
+    #listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
+    listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
 
 def eliminarCancion():
     cont = -1
@@ -120,19 +121,18 @@ def deletequeue(cancion_eliminar, cancion):
     cola_a_Lista()
 
 def deletelist(cancion_eliminar, cancion):
-    while (True):
-        if cancion.next is not None:
-            if cancion_eliminar == listadoCanciones.head.nombre:
-                listadoCanciones.head = listadoCanciones.head.next
-                break
-            if cancion_eliminar == cancion.nombre:
-                cancion.next.previous = cancion.previous
-                cancion.previous.next = cancion.next
-                break
-            else:
-                cancion = cancion.next
-        else:
+    global listadoCanciones
+    for nodo in listadoCanciones:
+        if (cancion_eliminar == cancion.nombre):
+            listadoCanciones.head = cancion.next
             break
+        elif (nodo.nombre == cancion_eliminar):
+            nodo.previous.next = nodo.next
+            if nodo.next is not None:
+                nodo.next.previous = nodo.previous
+            break
+        else:
+            nodo = nodo.next
     eliminarCancion()
 
 cargarCanciones()
@@ -221,6 +221,7 @@ def index():
             artista = request.form['autor']
             album = request.form['album']
             añadirCancion(nombre_cancion,artista,album)
+            actulizarListaCanciones()
         else:
             pass
 
