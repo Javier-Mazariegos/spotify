@@ -183,7 +183,7 @@ def index():
 
         #Agregar a la cola
         elif 'agregar' in request.form:
-            cancion_nueva = request.form['nombre cancion']
+            cancion_nueva = request.form['agregar']
             cancion = listadoCanciones.head
             while (True):
                 if cancion.next is not None or cancion.next != listadoCanciones.head:
@@ -206,26 +206,26 @@ def index():
             #colaCanciones.enqueue(xCancion)
             #deletequeue(xCancion.nombre, colaCanciones.head)
         elif 'delete_queue' in request.form:
-            cancion_eliminar = request.form['nombre cancion']
+            cancion_eliminar = request.form['delete_queue']
             cancion = colaCanciones.head
             deletequeue(cancion_eliminar, cancion)
             cola_a_Lista()
         elif 'delete_list' in request.form:
-            cancion_eliminar = request.form['nombre cancion']
+            cancion_eliminar = request.form['delete_list']
             cancion = listadoCanciones.head
             deletequeue(cancion_eliminar, colaCanciones.head)
             deletelist(cancion_eliminar, cancion)
             actulizarListaCanciones()
         elif 'añadir_cancion' in request.form:
-            nombre_cancion = request.form['nombre cancion']
-            artista = request.form['artista']
+            nombre_cancion = request.form['cancion']
+            artista = request.form['autor']
             album = request.form['album']
             añadirCancion(nombre_cancion,artista,album)
         else:
             pass
 
         template = env.get_template('spoti.html')
-        if(cancion != " "):
+        if(cancionActual != " "):
             return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album,style_sheet=css )
         else:
             return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---",style_sheet=css )

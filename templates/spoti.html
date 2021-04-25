@@ -1,21 +1,12 @@
 <link rel="stylesheet" type="text/css" href="{{style_sheet}}">
-<section class="header">
-    <div >
-    
-      <input type="text" placeholder="Autor" />
+<section class="header" >
+    <form action="/" method="POST">
+      <input type="text" placeholder="Autor" name="autor"/>
+      <input type="text" placeholder="Nombre Cancion" name="cancion"/>
+      <input type="text" placeholder="Nombre del album" name="album"/>
+      <button type="submit" class="button-dark" name="añadir_cancion">Guardar</button>
+    </form>
       
-    </div>
-    <div>
-    
-      <input type="text" placeholder="Nombre Cancion" />
-      
-    </div>
-    <div>
-      <button class="button-dark">
-              <i class="ion-ios-play"></i>
-              Guardar
-          </button>
-    </div> 
     
     
   </section>
@@ -23,19 +14,11 @@
         <div class="artist__info__actions">
                 <br>
                 <br>
-                <form action="/" method="POST"  id="myForm">
-                  <input type="hidden" value="play" name="play">
-                  <button class="button-dark">
-                    <i class="ion-ios-play"></i>
+                <form action="/" method="POST">
+                  <button type="submit" class="button-dark" name="play">
                     Play
                   </button>
-                </form>
-                <script>
-                  const myForm = document.getElementById("myForm");
-                  document.querySelector(".button-dark").addEventListener("click", function(){
-                      myForm.submit();
-                  });
-                </script>     
+                </form>    
         </div>
               
         
