@@ -75,17 +75,17 @@
                           
                           <div class="tracks__heading__title">Song</div>
                         </div>
-                        {%for cancion in colaLista %}
-                    <div class="track">
-                      <div class="track__number">{{loop.index}}</div>
-                      <div class="track__title">{{cancion.nombre}}</div>
-                      <div class="track__explicit">
-                        <form action="/" method="POST" >
-                          <button type="submit" name ="delete_queue" value="{{cancion.nombre}}">ELIMINAR DE LA COLA</button>
-                        </form>
-                      </div>
-                    </div>
-                    {% endfor %}
+                            {%for cancion in colaLista %}
+                        <div class="track">
+                          <div class="track__number">{{loop.index}}</div>
+                          <div class="track__title">{{cancion.nombre}}</div>
+                          <div class="track__explicit">
+                            <form action="/" method="POST" >
+                              <button type="submit" name ="delete_queue" value="{{cancion.nombre}}">ELIMINAR DE LA COLA</button>
+                            </form>
+                          </div>
+                        </div>
+                        {% endfor %}
   
   
                       </div>
@@ -107,16 +107,18 @@
   
   </section>
   
-  <section class="current-track">
-  
-    <div class="current-track__actions">
-          <button style="font-size:25px;">&#x23EE;</button>
-          <p style="color:#282828">  --   </p>
-          <button style="font-size:25px;" >&#x23F5;</button>
-          <p style="color:#282828">  --   </p>
-          <button style="font-size:25px;">&#x23ED;</button>
-          <p style="color:#282828">  --------   </p>
-          <a > {{nombreCancion}} </a>      
+  <section>
+      <div class="content1">
+      <form action="/" method="POST" class="f">
+        <button style="font-size:25px;">&#x23EE;</button>
+            <p style="color:#181818">  --   </p>
+            <button style="font-size:25px;" >&#x23F5;</button>
+            <p style="color:#181818">  --   </p>
+            <button style="font-size:25px;">&#x23ED;</button>
+      </form>
+          <p style="color:#181818">  --------   </p>
+          <p style="color:aliceblue"> {{nombreCancion}} </p>      
     </div>
+    
     
   </section> 

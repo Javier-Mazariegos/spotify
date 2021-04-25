@@ -169,7 +169,7 @@ def index():
             if cancionActual != cancion_nueva:    
                 cancion = listadoCanciones.head
                 while (True):
-                    if cancion.next is not None:
+                    if cancion.next is not None or cancion.next != listadoCanciones.head:
                         if cancion_nueva == cancion.nombre:
                             cancionActual = cancion
                             ultimaCancion = cancionActual
@@ -180,7 +180,6 @@ def index():
                         break
             else:
                 pass
-
         #Agregar a la cola
         elif 'agregar' in request.form:
             cancion_nueva = request.form['agregar']

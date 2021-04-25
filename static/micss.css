@@ -38,19 +38,24 @@ body a {
 }
 .current-track {
   display: flex;
-  align-items: center;
   background: rgb(40, 40, 40);
   padding: 5px 15px;
-  flex-flow: row wrap;
+  flex-wrap: wrap;
 }
 .current-track__actions {
   width: 5%;
-  display: contents;
-  flex-flow: row nowrap;
-  justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
-
+.content1 {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.content1 .f{
+  display: flex;
+  flex-wrap: nowrap;
+}
 .artist {
   height: 617px;
   overflow-y: scroll;
