@@ -4,6 +4,7 @@ from flask import Flask, request
 from jinja2 import Template, Environment, FileSystemLoader
 import csv
 import cProfile
+import time 
 from linkedlist import Cancion, LinkedList
 from queue import Queue
 
@@ -19,7 +20,7 @@ cancionActual = " "
 ultimaCancion = None
 
 
-
+@profile
 def añadirCancion(nombre,artista,album)-> None:
     global listadoCanciones
     datos = ["","",""]
@@ -33,6 +34,7 @@ def añadirCancion(nombre,artista,album)-> None:
     #listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
     listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
 
+@profile
 def eliminarCancion():
     cont = -1
     i = 0
@@ -54,7 +56,7 @@ def eliminarCancion():
             cancion = cancion.next
             i+=1
 
-
+@profile
 def cargarCanciones():
     global listadoCanciones, listaCanciones
     with open('listado.csv') as File:
@@ -67,6 +69,7 @@ def cargarCanciones():
             listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
             listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
 
+@profile
 def cola_a_Lista():
     global colaLista, colaCanciones
     colaLista = []
@@ -81,6 +84,8 @@ def cola_a_Lista():
                     break
             else:
                 break
+
+@profile
 def actulizarListaCanciones():
     global listadoCanciones, listaCanciones
     listaCanciones = []
@@ -96,8 +101,7 @@ def actulizarListaCanciones():
             else:
                 break
         
-
-
+@profile
 def deletequeue(cancion_eliminar, cancion):
     global colaCanciones
     contador = 0
@@ -118,8 +122,11 @@ def deletequeue(cancion_eliminar, cancion):
                 contador = contador + 1
         else:
             break
+    start_time = time.time()
     cola_a_Lista()
+    print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
 
+@profile
 def deletelist(cancion_eliminar, cancion):
     global listadoCanciones
     for nodo in listadoCanciones:
@@ -135,9 +142,12 @@ def deletelist(cancion_eliminar, cancion):
             nodo = nodo.next
     eliminarCancion()
 
+start_time = time.time()
 cargarCanciones()
+print("Time en 'cargarCanciones': %s  seconds " %(time.time() - start_time))
 #principal
 @app.route('/', methods=["GET","POST"], endpoint='index')
+@profile
 def index():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     contador = 0 
@@ -206,20 +216,28 @@ def index():
         elif 'delete_queue' in request.form:
             cancion_eliminar = request.form['delete_queue']
             cancion = colaCanciones.head
+            start_time = time.time()
             deletequeue(cancion_eliminar, cancion)
+            print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
             cola_a_Lista()
         elif 'delete_list' in request.form:
             cancion_eliminar = request.form['delete_list']
             cancion = listadoCanciones.head
             deletequeue(cancion_eliminar, colaCanciones.head)
+            start_time = time.time()
             deletelist(cancion_eliminar, cancion)
+            print("Time en 'deletelist': %s  seconds " %(time.time() - start_time))
             actulizarListaCanciones()
         elif 'añadir_cancion' in request.form:
             nombre_cancion = request.form['cancion']
             artista = request.form['autor']
             album = request.form['album']
+            start_time = time.time()
             añadirCancion(nombre_cancion,artista,album)
+            print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
+            start_time = time.time()
             actulizarListaCanciones()
+            print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
         else:
             pass
 
@@ -234,6 +252,11 @@ def index():
 if __name__ == '__main__':
     app.run(debug=True)
 
-#cProfile.run("listadoCanciones.insertar('The Show Must Go On','Queen','Innuendo')")
-#cProfile.run("añadirCancion('The Show Must Go On','Queen','Innuendo')")
-#cProfile.run("cargarCanciones()")
+cProfile.run("cargarCanciones()")
+cProfile.run("eliminarCancion()")
+cProfile.run("añadirCancion('The Show Must Go On','Queen','Innuendo')")
+colaCanciones.enqueue(Cancion("Levitating","Dua Lipa","Future Nostalgia"))
+cProfile.run("cola_a_Lista()")
+cProfile.run("actulizarListaCanciones()")
+cProfile.run("deletequeue('Levitating','colaCanciones.head')")
+cProfile.run("deletelist('Levitating',listadoCanciones.head)")
