@@ -144,7 +144,7 @@ def index():
     css = url_for('static', filename='micss.css')
     #cambiar cancion
     if(request.method == "POST"):
-        if request.form.get('Play Previous') == 'Play Previous':
+        if 'Play Previous' in request.form:
             if(cancionActual.nombre != ultimaCancion.nombre):
                 cancionActual = ultimaCancion
             else:
@@ -154,7 +154,7 @@ def index():
                     cancionActual = cancionActual.previous
                     ultimaCancion = cancionActual
 
-        elif request.form.get('Play Next') == 'Play Next':
+        elif 'Play Next' in request.form:
             if colaCanciones.is_empty1() == True:
                 if(ultimaCancion.next == listadoCanciones.head or ultimaCancion.next is None):
                     cancionActual = listadoCanciones.head
@@ -164,8 +164,8 @@ def index():
                     ultimaCancion = cancionActual
             else:
                 cancionActual = colaCanciones.dequeue()
-        elif request.form['play nueva']:#A ESTA FORMA TODOS
-            cancion_nueva = request.form['play nueva']#A ESTA FORMA TODOS
+        elif 'play nueva' in request.form:
+            cancion_nueva = request.form['play nueva']
             if cancionActual != cancion_nueva:    
                 cancion = listadoCanciones.head
                 while (True):
@@ -182,46 +182,53 @@ def index():
                 pass
 
         #Agregar a la cola
-        elif request.form.get('agregar') == 'agregar':
-            cancion_nueva = request.form.get('nombre cancion')
+        elif 'agregar' in request.form:
+            cancion_nueva = request.form['nombre cancion']
             cancion = listadoCanciones.head
             while (True):
-                if cancion.next is not None:
+                if cancion.next is not None or cancion.next != listadoCanciones.head:
                     if cancion_nueva == cancion.nombre:
                         colaCanciones.enqueue(cancion)
+                        print(cancion.nombre)
                         break
                     else:
                         cancion = cancion.next
+                else:
+                    break
+
             cola_a_Lista()
         #se reproduce la primera cancion
-        elif request.form.get('play') == 'play':
+        elif 'play' in request.form:
             if cancionActual == " ":
                 cancionActual = listadoCanciones.head
                 ultimaCancion = cancionActual
             #xCancion = Cancion("Levitating", "Dua Lipa", "Future Nostalgia")
             #colaCanciones.enqueue(xCancion)
             #deletequeue(xCancion.nombre, colaCanciones.head)
-        elif request.form.get('delete_queue') == 'delete_queue':
-            cancion_eliminar = request.form.get('nombre cancion')
+        elif 'delete_queue' in request.form:
+            cancion_eliminar = request.form['nombre cancion']
             cancion = colaCanciones.head
             deletequeue(cancion_eliminar, cancion)
             cola_a_Lista()
-        elif request.form.get('delete_list') == 'delete_list':
-            cancion_eliminar = request.form.get('nombre cancion')
+        elif 'delete_list' in request.form:
+            cancion_eliminar = request.form['nombre cancion']
             cancion = listadoCanciones.head
             deletequeue(cancion_eliminar, colaCanciones.head)
             deletelist(cancion_eliminar, cancion)
             actulizarListaCanciones()
-        elif request.form.get('añadir_cancion') == 'añadir_cancion':
-            nombre_cancion = request.form.get('nombre cancion')
-            artista = request.form.get('artista')
-            album = request.form.get('album')
+        elif 'añadir_cancion' in request.form:
+            nombre_cancion = request.form['nombre cancion']
+            artista = request.form['artista']
+            album = request.form['album']
             añadirCancion(nombre_cancion,artista,album)
         else:
             pass
 
         template = env.get_template('spoti.html')
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album,style_sheet=css )
+        if(cancion != " "):
+            return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album,style_sheet=css )
+        else:
+            return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---",style_sheet=css )
     template = env.get_template('spoti.html')
     return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---", style_sheet=css)
 
