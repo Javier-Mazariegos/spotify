@@ -226,11 +226,11 @@ def index():
 
         template = env.get_template('spoti.html')
         if(cancionActual != " "):
-            return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,nombreArtista=cancionActual.artista,nombreAlbum=cancionActual.album,style_sheet=css )
+            return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css )
         else:
-            return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---",style_sheet=css )
+            return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css )
     template = env.get_template('spoti.html')
-    return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",nombreArtista="---",nombreAlbum="---", style_sheet=css)
+    return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---", style_sheet=css)
 
 if __name__ == '__main__':
     app.run(debug=True)
