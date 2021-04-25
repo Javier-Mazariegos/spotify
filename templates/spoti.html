@@ -60,7 +60,7 @@
                       <div class="track__explicit">
                         <form action="/" method="POST" >
                           <button type="submit" name ="play nueva" value="{{cancion.nombre}}">PLAY</button>
-                          <button type="submit" name ="agergar" value="{{cancion.nombre}}">AGREGAR A LA COLA</button>
+                          <button type="submit" name ="agregar" value="{{cancion.nombre}}">AGREGAR A LA COLA</button>
                           <button type="submit" name ="delete_list" value="{{cancion.nombre}}">ELIMINAR</button>
                         </form>
                       </div>
@@ -93,31 +93,16 @@
                           <div class="tracks__heading__title">Song</div>
                         </div>
                         {%for cancion in colaLista %}
-                        <div class="track">
-
-                          <div class="track__number">{{loop.index}}</div>
-                          <div class="track__title">{{cancion.nombre}}</div>
-      
-                          <div class="track__explicit">
-                            <form action="/" method="POST"  id="myForm">
-                              <input type="hidden" value="delete_queue" name="delete_queue">
-                              <input type="hidden" value="{{cancion.nombre}}" name="nombre cancion">
-                              <button class="de">
-                                <i class="ion-ios-play"></i>
-                                Eliminar
-                              </button>
-                            </form>
-                            <script>
-                              const myForm = document.getElementById("myForm");
-                              document.querySelector(".de").addEventListener("click", function(){
-                                  myForm.submit();
-                              });
-                            </script>                           
-      
-                          </div>
-      
-                        </div>
-                      {% endfor %}
+                    <div class="track">
+                      <div class="track__number">{{loop.index}}</div>
+                      <div class="track__title">{{cancion.nombre}}</div>
+                      <div class="track__explicit">
+                        <form action="/" method="POST" >
+                          <button type="submit" name ="delete_queue" value="{{cancion.nombre}}">ELIMINAR DE LA COLA</button>
+                        </form>
+                      </div>
+                    </div>
+                    {% endfor %}
   
   
                       </div>
