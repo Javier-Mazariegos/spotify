@@ -153,7 +153,7 @@ def index():
                 else:
                     cancionActual = cancionActual.previous
                     ultimaCancion = cancionActual
-
+            cola_a_Lista()
         elif 'Play Next' in request.form:
             if colaCanciones.is_empty1() == True:
                 if(ultimaCancion.next == listadoCanciones.head or ultimaCancion.next is None):
@@ -164,6 +164,7 @@ def index():
                     ultimaCancion = cancionActual
             else:
                 cancionActual = colaCanciones.dequeue()
+            cola_a_Lista()
         elif 'play nueva' in request.form:
             cancion_nueva = request.form['play nueva']
             if cancionActual != cancion_nueva:    
@@ -180,10 +181,11 @@ def index():
                         break
             else:
                 pass
+            
         #Agregar a la cola
         elif 'agregar' in request.form:
             cancion_nueva = request.form['agregar']
-            
+
             for nodo in listadoCanciones:
                 if nodo.nombre == cancion_nueva:
                     n = Cancion(nodo.nombre, nodo.artista, nodo.album)
