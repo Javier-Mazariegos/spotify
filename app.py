@@ -164,8 +164,8 @@ def index():
                     ultimaCancion = cancionActual
             else:
                 cancionActual = colaCanciones.dequeue()
-        elif request.form.get('play nueva') == 'play nueva':
-            cancion_nueva = request.form.get('nombre cancion')
+        elif request.form['play nueva']:#A ESTA FORMA TODOS
+            cancion_nueva = request.form['play nueva']#A ESTA FORMA TODOS
             if cancionActual != cancion_nueva:    
                 cancion = listadoCanciones.head
                 while (True):
