@@ -183,17 +183,14 @@ def index():
         #Agregar a la cola
         elif 'agregar' in request.form:
             cancion_nueva = request.form['agregar']
-            cancion = listadoCanciones.head
-            while (True):
-                if cancion.next is not None or cancion.next != listadoCanciones.head:
-                    if cancion_nueva == cancion.nombre:
-                        colaCanciones.enqueue(cancion)
-                        print(cancion.nombre)
-                        break
-                    else:
-                        cancion = cancion.next
-                else:
+            
+            for nodo in listadoCanciones:
+                if nodo.nombre == cancion_nueva:
+                    n = Cancion(nodo.nombre, nodo.artista, nodo.album)
+                    colaCanciones.enqueue(n)
                     break
+                else:
+                    nodo = nodo.next
 
             cola_a_Lista()
         #se reproduce la primera cancion
