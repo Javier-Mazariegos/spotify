@@ -213,7 +213,7 @@ def index():
             deletelist(cancion_eliminar, cancion)
             actulizarListaCanciones()
         elif request.form.get('añadir_cancion') == 'añadir_cancion':
-            nombre_cancion = request.form.get('nombre')
+            nombre_cancion = request.form.get('nombre cancion')
             artista = request.form.get('artista')
             album = request.form.get('album')
             añadirCancion(nombre_cancion,artista,album)

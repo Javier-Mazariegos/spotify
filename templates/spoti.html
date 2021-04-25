@@ -23,12 +23,21 @@
         <div class="artist__info__actions">
                 <br>
                 <br>
-                <button class="button-dark">
-                  <i class="ion-ios-play"></i>
-                  Play
-                </button>
-              </div>
-      
+                <form action="/" method="POST"  id="myForm">
+                  <input type="hidden" value="play" name="play">
+                  <button class="button-dark">
+                    <i class="ion-ios-play"></i>
+                    Play
+                  </button>
+                </form>
+                <script>
+                  const myForm = document.getElementById("myForm");
+                  document.querySelector(".button-dark").addEventListener("click", function(){
+                      myForm.submit();
+                  });
+                </script>     
+        </div>
+              
         
         <div class="artist__content">
         
@@ -44,31 +53,29 @@
                   <div class="section-title">Playlist</div>
   
                   <div class="tracks">
-  
+                  {%for cancion in listadoCanciones %}
                     <div class="track">
-  
-                      <div class="track__number">1</div>
-  
-                      <div class="track__title">Me, Myself & I</div>
-  
+                      <div class="track__number">{{loop.index}}</div>
+                      <div class="track__title">{{cancion.nombre}}</div>
                       <div class="track__explicit">
-  
-                        <button >
-                          <i class="ion-ios-play"></i>
-                          Play
-                        </button>
-                        <button>
-                          <i class="ion-ios-play"></i>
-                          Agregar a la cola
-                        </button>
-                        <button >
-                          <i class="ion-ios-play"></i>
-                          Eliminar
-                        </button>
-  
+                        <form action="/" method="POST"  id="myForm">
+                          <input type="hidden" value="play nueva" name="play nueva">
+                          <input type="hidden" value="{{cancion.nombre}}" name="nombre cancion">
+                          <button class="pn">
+                            <i class="ion-ios-play"></i>
+                            Play
+                          </button>
+                        </form>
+                        <script>
+                          const myForm = document.getElementById("myForm");
+                          document.querySelector(".pn").addEventListener("click", function(){
+                              myForm.submit();
+                          });
+                        </script>
                       </div>
   
                     </div>
+                    {% endfor %}
   
                   </div>
                
@@ -95,36 +102,33 @@
                           
                           <div class="tracks__heading__title">Song</div>
                         </div>
+                        {%for cancion in colaLista %}
                         <div class="track">
-  
-                          <div class="track__number">1</div>
-  
-                          <div class="track__added">
-  
-                            <i class="ion-checkmark-round added"></i>
-  
-                          </div>
-  
-                          <div class="track__title">Intro</div>
-  
+
+                          <div class="track__number">{{loop.index}}</div>
+                          <div class="track__title">{{cancion.nombre}}</div>
+      
                           <div class="track__explicit">
-  
-                            <button >
-                              <i class="ion-ios-play"></i>
-                              #
-                            </button>
-                            <button>
-                              <i class="ion-ios-play"></i>
-                              #
-                            </button>
-                            <button >
-                              <i class="ion-ios-play"></i>
-                              #
-                            </button>
+                            <form action="/" method="POST"  id="myForm">
+                              <input type="hidden" value="delete_queue" name="delete_queue">
+                              <input type="hidden" value="{{cancion.nombre}}" name="nombre cancion">
+                              <button class="de">
+                                <i class="ion-ios-play"></i>
+                                Eliminar
+                              </button>
+                            </form>
+                            <script>
+                              const myForm = document.getElementById("myForm");
+                              document.querySelector(".de").addEventListener("click", function(){
+                                  myForm.submit();
+                              });
+                            </script>                           
       
                           </div>
-  
+      
                         </div>
+                      {% endfor %}
+  
   
                       </div>
                       
@@ -154,7 +158,7 @@
           <p style="color:#282828">  --   </p>
           <button style="font-size:25px;">&#x23ED;</button>
           <p style="color:#282828">  --------   </p>
-          <a > nombre de la cancion </a>      
+          <a > {{nombreCancion}} </a>      
     </div>
     
   </section> 
