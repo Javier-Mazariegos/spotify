@@ -140,7 +140,9 @@ def deletelist(cancion_eliminar, cancion):
             break
         else:
             nodo = nodo.next
+    start_time = time.timme()
     eliminarCancion()
+    print("Time en 'eliminarCancion': %s  seconds " %(time.time() - start_time))
 
 start_time = time.time()
 cargarCanciones()
@@ -163,7 +165,9 @@ def index():
                 else:
                     cancionActual = cancionActual.previous
                     ultimaCancion = cancionActual
+            start_time = time.time()
             cola_a_Lista()
+            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
         elif 'Play Next' in request.form:
             if colaCanciones.is_empty1() == True:
                 if(ultimaCancion.next == listadoCanciones.head or ultimaCancion.next is None):
@@ -174,7 +178,9 @@ def index():
                     ultimaCancion = cancionActual
             else:
                 cancionActual = colaCanciones.dequeue()
+            start_time = time.time()
             cola_a_Lista()
+            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
         elif 'play nueva' in request.form:
             cancion_nueva = request.form['play nueva']
             if cancionActual != cancion_nueva:    
@@ -203,8 +209,9 @@ def index():
                     break
                 else:
                     nodo = nodo.next
-
+            start_time = time.time()
             cola_a_Lista()
+            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
         #se reproduce la primera cancion
         elif 'play' in request.form:
             if cancionActual == " ":
@@ -219,15 +226,21 @@ def index():
             start_time = time.time()
             deletequeue(cancion_eliminar, cancion)
             print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
+            start_time = time.time()
             cola_a_Lista()
+            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
         elif 'delete_list' in request.form:
             cancion_eliminar = request.form['delete_list']
             cancion = listadoCanciones.head
+            start_time = time.time()
             deletequeue(cancion_eliminar, colaCanciones.head)
+            print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
             start_time = time.time()
             deletelist(cancion_eliminar, cancion)
             print("Time en 'deletelist': %s  seconds " %(time.time() - start_time))
+            start_time = time.time()
             actulizarListaCanciones()
+            print("actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
         elif 'añadir_cancion' in request.form:
             nombre_cancion = request.form['cancion']
             artista = request.form['autor']
@@ -251,12 +264,3 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-cProfile.run("cargarCanciones()")
-cProfile.run("eliminarCancion()")
-cProfile.run("añadirCancion('The Show Must Go On','Queen','Innuendo')")
-colaCanciones.enqueue(Cancion("Levitating","Dua Lipa","Future Nostalgia"))
-cProfile.run("cola_a_Lista()")
-cProfile.run("actulizarListaCanciones()")
-cProfile.run("deletequeue('Levitating','colaCanciones.head')")
-cProfile.run("deletelist('Levitating',listadoCanciones.head)")
