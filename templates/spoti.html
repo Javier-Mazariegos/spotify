@@ -42,9 +42,9 @@
                       <div class="track__title">{{cancion.nombre}}</div>
                       <div class="track__explicit">
                         <form action="/" method="POST" >
-                          <button type="submit" name ="play nueva" value="{{cancion.nombre}}">PLAY</button>
-                          <button type="submit" name ="agregar" value="{{cancion.nombre}}">AGREGAR A LA COLA</button>
-                          <button type="submit" name ="delete_list" value="{{cancion.nombre}}">ELIMINAR</button>
+                          <button type="submit" id="play {{cancion.nombre}}" name ="play nueva" value="{{cancion.nombre}}">PLAY</button>
+                          <button type="submit" id="cola {{cancion.nombre}}" name ="agregar" value="{{cancion.nombre}}">AGREGAR A LA COLA</button>
+                          <button type="submit" id="eliminar {{cancion.nombre}}" name ="delete_list" value="{{cancion.nombre}}">ELIMINAR</button>
                         </form>
                       </div>
                     </div>
