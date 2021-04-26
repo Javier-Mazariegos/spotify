@@ -3,7 +3,7 @@ from memory_profiler import profile
 from flask import Flask, request
 from jinja2 import Template, Environment, FileSystemLoader
 import csv
-import cProfile
+import unittest
 import time 
 from linkedlist import Cancion, LinkedList
 from queue import Queue
@@ -33,6 +33,50 @@ def añadirCancion(nombre,artista,album)-> None:
         writer.writerow(datos)
     #listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
     listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
+    comprobadorListadoTrue(datos[0])
+
+def contadorListado(nombreCancion):
+    global listadoCanciones
+    comprobacion = False
+    for c in listadoCanciones:
+        if nombreCancion == c.nombre:
+            comprobacion = True
+    return comprobacion
+
+def contadorQueue(nombreCancion):
+    comprobacion = False
+    if colaCanciones.is_empty1() == False:
+        currentNode = colaCanciones.head
+        while (True):
+            if currentNode.next is not None or colaCanciones.is_empty1() == False:
+                if currentNode.next is not None:
+                    if nombreCancion == currentNode.nombre:
+                        comprobacion = True
+                        break
+                    currentNode = currentNode.next
+                else:
+                    break
+            else:
+                return comprobacion
+                break
+    return comprobacion
+
+def comprobadorListadoTrue(nombreCancion):
+    resultado = contadorListado(nombreCancion)
+    assert resultado == True, "Debe ser 'True'"
+
+def comprobadorListadoFalse(nombreCancion):
+    resultado = contadorListado(nombreCancion)
+    assert resultado == False, "Debe ser 'False'"
+    
+def comprobadorQueueTrue(nombreCancion):
+    resultado = contadorQueue(nombreCancion)
+    assert resultado == True, "Debe ser 'True'"
+
+def comprobadorQueueFalse(nombreCancion):
+    resultado = contadorQueue(nombreCancion)
+    assert resultado == False, "Debe ser 'False'"
+
 
 @profile
 def eliminarCancion():
@@ -68,6 +112,7 @@ def cargarCanciones():
             #else:
             listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
             listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
+            comprobadorListadoTrue(datos[0])
 
 @profile
 def cola_a_Lista():
@@ -125,6 +170,8 @@ def deletequeue(cancion_eliminar, cancion):
     start_time = time.time()
     cola_a_Lista()
     print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
+    comprobadorQueueFalse(cancion_eliminar)
+
 
 @profile
 def deletelist(cancion_eliminar, cancion):
@@ -143,6 +190,8 @@ def deletelist(cancion_eliminar, cancion):
     start_time = time.timme()
     eliminarCancion()
     print("Time en 'eliminarCancion': %s  seconds " %(time.time() - start_time))
+    comprobadorListadoFalse(cancion_eliminar)
+    comprobadorQueueFalse(cancion_eliminar)
 
 start_time = time.time()
 cargarCanciones()
@@ -212,6 +261,7 @@ def index():
             start_time = time.time()
             cola_a_Lista()
             print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
+            comprobadorQueueTrue(cancion_nueva)
         #se reproduce la primera cancion
         elif 'play' in request.form:
             if cancionActual == " ":
