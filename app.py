@@ -3,7 +3,7 @@ from memory_profiler import profile
 from flask import Flask, request
 from jinja2 import Template, Environment, FileSystemLoader
 import csv
-import cProfile
+import unittest
 import time 
 from linkedlist import Cancion, LinkedList
 from queue import Queue
@@ -33,6 +33,57 @@ def añadirCancion(nombre,artista,album)-> None:
         writer.writerow(datos)
     #listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
     listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
+    comprobadorListadoTrue(datos[0])
+
+def contadorListado(nombreCancion):
+    global listadoCanciones
+    comprobacion = False
+    for c in listadoCanciones:
+        if nombreCancion == c.nombre:
+            comprobacion = True
+            break
+    return comprobacion
+
+def contadorQueue(nombreCancion):
+    comprobacion = False
+    entrada = colaCanciones.is_empty1()
+    currentNode = colaCanciones.head
+
+    if entrada == False:
+        
+        if nombreCancion == currentNode.nombre:
+            comprobacion = True
+            entrada = True
+
+        while (True):
+            if entrada == False:
+                if nombreCancion == currentNode.nombre:
+                    comprobacion = True
+                    break
+                if currentNode.next is not None:
+                    currentNode = currentNode.next
+                else:
+                    break
+            else:
+                break
+    return comprobacion
+
+def comprobadorListadoTrue(nombreCancion):
+    resultado = contadorListado(nombreCancion)
+    assert resultado == True, "Debe ser True"
+
+def comprobadorListadoFalse(nombreCancion):
+    resultado = contadorListado(nombreCancion)
+    assert resultado == False, "Debe ser False"
+    
+def comprobadorQueueTrue(nombreCancion):
+    resultado = contadorQueue(nombreCancion)
+    assert resultado == True, "Debe ser True"
+
+def comprobadorQueueFalse(nombreCancion):
+    resultado = contadorQueue(nombreCancion)
+    assert resultado == False, "Debe ser False"
+
 
 @profile
 def eliminarCancion():
@@ -68,6 +119,7 @@ def cargarCanciones():
             #else:
             listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
             listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
+            comprobadorListadoTrue(datos[0])
 
 @profile
 def cola_a_Lista():
@@ -125,6 +177,8 @@ def deletequeue(cancion_eliminar, cancion):
     start_time = time.time()
     cola_a_Lista()
     print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
+    comprobadorQueueFalse(cancion_eliminar)
+
 
 @profile
 def deletelist(cancion_eliminar, cancion):
@@ -140,7 +194,10 @@ def deletelist(cancion_eliminar, cancion):
             break
         else:
             nodo = nodo.next
+    start_time = time.time()
     eliminarCancion()
+    print("Time en 'eliminarCancion': %s  seconds " %(time.time() - start_time))
+    comprobadorListadoFalse(cancion_eliminar)
 
 start_time = time.time()
 cargarCanciones()
@@ -163,7 +220,9 @@ def index():
                 else:
                     cancionActual = cancionActual.previous
                     ultimaCancion = cancionActual
+            start_time = time.time()
             cola_a_Lista()
+            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
         elif 'Play Next' in request.form:
             if colaCanciones.is_empty1() == True:
                 if(ultimaCancion.next == listadoCanciones.head or ultimaCancion.next is None):
@@ -174,7 +233,9 @@ def index():
                     ultimaCancion = cancionActual
             else:
                 cancionActual = colaCanciones.dequeue()
+            start_time = time.time()
             cola_a_Lista()
+            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
         elif 'play nueva' in request.form:
             cancion_nueva = request.form['play nueva']
             if cancionActual != cancion_nueva:    
@@ -200,11 +261,13 @@ def index():
                 if nodo.nombre == cancion_nueva:
                     n = Cancion(nodo.nombre, nodo.artista, nodo.album)
                     colaCanciones.enqueue(n)
+                    comprobadorQueueTrue(cancion_nueva)
                     break
                 else:
                     nodo = nodo.next
-
+            start_time = time.time()
             cola_a_Lista()
+            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
         #se reproduce la primera cancion
         elif 'play' in request.form:
             if cancionActual == " ":
@@ -219,15 +282,21 @@ def index():
             start_time = time.time()
             deletequeue(cancion_eliminar, cancion)
             print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
+            start_time = time.time()
             cola_a_Lista()
+            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
         elif 'delete_list' in request.form:
             cancion_eliminar = request.form['delete_list']
             cancion = listadoCanciones.head
+            start_time = time.time()
             deletequeue(cancion_eliminar, colaCanciones.head)
+            print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
             start_time = time.time()
             deletelist(cancion_eliminar, cancion)
             print("Time en 'deletelist': %s  seconds " %(time.time() - start_time))
+            start_time = time.time()
             actulizarListaCanciones()
+            print("actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
         elif 'añadir_cancion' in request.form:
             nombre_cancion = request.form['cancion']
             artista = request.form['autor']
@@ -251,12 +320,3 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-cProfile.run("cargarCanciones()")
-cProfile.run("eliminarCancion()")
-cProfile.run("añadirCancion('The Show Must Go On','Queen','Innuendo')")
-colaCanciones.enqueue(Cancion("Levitating","Dua Lipa","Future Nostalgia"))
-cProfile.run("cola_a_Lista()")
-cProfile.run("actulizarListaCanciones()")
-cProfile.run("deletequeue('Levitating','colaCanciones.head')")
-cProfile.run("deletelist('Levitating',listadoCanciones.head)")
