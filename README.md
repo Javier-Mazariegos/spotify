@@ -30,6 +30,17 @@
    Link: https://lucid.app/lucidchart/invitations/accept/5a2a3726-ce2d-4c1f-881a-db6a1518c77b
 # Tiempos de funciones:
    ![image](https://user-images.githubusercontent.com/61555440/116156137-54a8d780-a6a8-11eb-895b-1e907b14d839.png)
+# Profiling
+   ![image](https://user-images.githubusercontent.com/61555440/116157042-88d0c800-a6a9-11eb-9d05-1b1984098c68.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157065-938b5d00-a6a9-11eb-9f90-b6f4ac298fff.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157121-a4d46980-a6a9-11eb-911a-c71f8665eeab.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157230-d9482580-a6a9-11eb-89f1-2483f6420946.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157283-eebd4f80-a6a9-11eb-8bd6-13a72f576ca7.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157398-25936580-a6aa-11eb-97de-6037da67a420.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157411-2cba7380-a6aa-11eb-93f2-de27b5892a46.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157430-32b05480-a6aa-11eb-8026-5ee4de85da91.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157529-5e333f00-a6aa-11eb-8df5-6609dbfe8411.png)
+   ![image](https://user-images.githubusercontent.com/61555440/116157630-8cb11a00-a6aa-11eb-8d1e-12a34f4cea85.png)
 # Video de ejecución satisfactoria con Selenium
    
     
