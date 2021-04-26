@@ -199,9 +199,7 @@ def deletelist(cancion_eliminar, cancion):
     print("Time en 'eliminarCancion': %s  seconds " %(time.time() - start_time))
     comprobadorListadoFalse(cancion_eliminar)
 
-start_time = time.time()
-cargarCanciones()
-print("Time en 'cargarCanciones': %s  seconds " %(time.time() - start_time))
+
 #principal
 @app.route('/', methods=["GET","POST"], endpoint='index')
 @profile
@@ -319,4 +317,7 @@ def index():
     return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---", style_sheet=css)
 
 if __name__ == '__main__':
+    start_time = time.time()
+    cargarCanciones()
+    print("Time en 'cargarCanciones': %s  seconds " %(time.time() - start_time))
     app.run(debug=True)
