@@ -41,41 +41,48 @@ def contadorListado(nombreCancion):
     for c in listadoCanciones:
         if nombreCancion == c.nombre:
             comprobacion = True
+            break
     return comprobacion
 
 def contadorQueue(nombreCancion):
     comprobacion = False
-    if colaCanciones.is_empty1() == False:
-        currentNode = colaCanciones.head
+    entrada = colaCanciones.is_empty1()
+    currentNode = colaCanciones.head
+
+    if entrada == False:
+        
+        if nombreCancion == currentNode.nombre:
+            comprobacion = True
+            entrada = True
+
         while (True):
-            if currentNode.next is not None or colaCanciones.is_empty1() == False:
+            if entrada == False:
+                if nombreCancion == currentNode.nombre:
+                    comprobacion = True
+                    break
                 if currentNode.next is not None:
-                    if nombreCancion == currentNode.nombre:
-                        comprobacion = True
-                        break
                     currentNode = currentNode.next
                 else:
                     break
             else:
-                return comprobacion
                 break
     return comprobacion
 
 def comprobadorListadoTrue(nombreCancion):
     resultado = contadorListado(nombreCancion)
-    assert resultado == True, "Debe ser 'True'"
+    assert resultado == True, "Debe ser True"
 
 def comprobadorListadoFalse(nombreCancion):
     resultado = contadorListado(nombreCancion)
-    assert resultado == False, "Debe ser 'False'"
+    assert resultado == False, "Debe ser False"
     
 def comprobadorQueueTrue(nombreCancion):
     resultado = contadorQueue(nombreCancion)
-    assert resultado == True, "Debe ser 'True'"
+    assert resultado == True, "Debe ser True"
 
 def comprobadorQueueFalse(nombreCancion):
     resultado = contadorQueue(nombreCancion)
-    assert resultado == False, "Debe ser 'False'"
+    assert resultado == False, "Debe ser False"
 
 
 @profile
@@ -187,11 +194,10 @@ def deletelist(cancion_eliminar, cancion):
             break
         else:
             nodo = nodo.next
-    start_time = time.timme()
+    start_time = time.time()
     eliminarCancion()
     print("Time en 'eliminarCancion': %s  seconds " %(time.time() - start_time))
     comprobadorListadoFalse(cancion_eliminar)
-    comprobadorQueueFalse(cancion_eliminar)
 
 start_time = time.time()
 cargarCanciones()
@@ -255,13 +261,13 @@ def index():
                 if nodo.nombre == cancion_nueva:
                     n = Cancion(nodo.nombre, nodo.artista, nodo.album)
                     colaCanciones.enqueue(n)
+                    comprobadorQueueTrue(cancion_nueva)
                     break
                 else:
                     nodo = nodo.next
             start_time = time.time()
             cola_a_Lista()
             print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
-            comprobadorQueueTrue(cancion_nueva)
         #se reproduce la primera cancion
         elif 'play' in request.form:
             if cancionActual == " ":
