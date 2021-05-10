@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="{{style_sheet}}">
 <section class="header" >
-    <form action="/" method="POST">
+    <form action="/añadir_cancion" method="POST">
       <input type="text" placeholder="Autor" name="autor"/>
       <input type="text" placeholder="Nombre Cancion" name="cancion"/>
       <input type="text" placeholder="Nombre del album" name="album"/>
@@ -14,7 +14,7 @@
         <div class="artist__info__actions">
                 <br>
                 <br>
-                <form action="/" method="POST">
+                <form action="/play" method="POST">
                   <button type="submit" class="button-dark" name="play">
                     Play
                   </button>
@@ -41,15 +41,22 @@
                       <div class="track__number">{{loop.index}}</div>
                       <div class="track__title">{{cancion.nombre}}</div>
                       <div class="track__explicit">
-                        <form action="/" method="POST" >
-                          <button type="submit" id="play {{cancion.nombre}}" name ="play nueva" value="{{cancion.nombre}}">PLAY</button>
-                          <button type="submit" id="cola {{cancion.nombre}}" name ="agregar" value="{{cancion.nombre}}">AGREGAR A LA COLA</button>
-                          <button type="submit" id="eliminar {{cancion.nombre}}" name ="delete_list" value="{{cancion.nombre}}">ELIMINAR</button>
+
+                        <form id="myForm{{loop.index}}" action="" method="POST">
+                          
+                          <button class="botonplay" id="play {{cancion.nombre}}" name ="play_nueva" value="{{cancion.nombre}}" onclick ="document.getElementById('myForm{{loop.index}}').action = '/play_nueva'; document.getElementById('myForm{{loop.index}}').submit();">PLAY</button>
+                          <input type="hidden" name="play_nueva" value="{{cancion.nombre}}">
+                          <button id="cola {{cancion.nombre}}" name="agregar" value="{{cancion.nombre}}" onclick ="document.getElementById('myForm{{loop.index}}').action = '/agregar'; document.getElementById('myForm{{loop.index}}').submit(); ">AGREGAR A LA COLA</button>
+                          <input type="hidden" name="agregar" value="{{cancion.nombre}}">
+                          <button class="botoneliminar" id="eliminar {{cancion.nombre}}" name ="delete_list" value="{{cancion.nombre}}" onclick ="document.getElementById('myForm{{loop.index}}').action = '/delete_list';document.getElementById('myForm{{loop.index}}').submit();">ELIMINAR</button>
+                          <input type="hidden" name="delete_list" value="{{cancion.nombre}}">
                         </form>
+                        
                       </div>
                     </div>
+                    
                     {% endfor %}
-  
+                    
                   </div>
                
                 </div>
@@ -80,7 +87,7 @@
                           <div class="track__number">{{loop.index}}</div>
                           <div class="track__title">{{cancion.nombre}}</div>
                           <div class="track__explicit">
-                            <form action="/" method="POST" >
+                            <form action="/delete_queue" method="POST" >
                               <button type="submit" id="eliminar cola {{cancion.nombre}}" name ="delete_queue" value="{{cancion.nombre}}">ELIMINAR DE LA COLA</button>
                             </form>
                           </div>
@@ -109,12 +116,12 @@
   
   <section>
       <div class="content1">
-      <form action="/" method="POST" class="f">
-        <button style="font-size:25px;" name="Play Previous">&#x23EE;</button>
+      <form action="" method="POST" class="f" id="form1">
+        <button class="botonPlay_Previous" style="font-size:25px;" name="Play_Previous" onclick ="document.getElementById('form1').action = '/Play_Previous'; document.getElementById('form1').submit();">&#x23EE;</button>
             <p style="color:#181818">  --   </p>
-            <button style="font-size:25px;" name="play">&#x23F5;</button>
+            <button class="botonplay1" style="font-size:25px;" name="play" onclick ="document.getElementById('form1').action = '/play'; document.getElementById('form1').submit();">&#x23F5;</button>
             <p style="color:#181818">  --   </p>
-            <button style="font-size:25px;"  name="Play Next">&#x23ED;</button>
+            <button class="botonPlay_Next" style="font-size:25px;"  name="Play_Next" onclick ="document.getElementById('form1').action = '/Play_Next'; document.getElementById('form1').submit();">&#x23ED;</button>
       </form>
           <p style="color:#181818">  --------   </p>
           <p style="color:aliceblue"> {{nombreCancion}} </p>      

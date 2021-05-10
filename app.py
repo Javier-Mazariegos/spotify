@@ -1,6 +1,6 @@
 from flask.helpers import url_for
 from memory_profiler import profile
-from flask import Flask, request
+from flask import Flask, request, redirect
 from jinja2 import Template, Environment, FileSystemLoader
 import csv
 import unittest
@@ -8,9 +8,11 @@ import time
 from linkedlist import Cancion, LinkedList
 from queue import Queue
 
+
 File_loader = FileSystemLoader("templates")
 env = Environment(loader=File_loader)
 app = Flask(__name__)
+
 
 listadoCanciones = LinkedList()
 colaCanciones = Queue()
@@ -18,6 +20,8 @@ listaCanciones = []
 colaLista = []
 cancionActual = " "
 ultimaCancion = None
+
+
 
 
 @profile
@@ -207,9 +211,19 @@ def index():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     contador = 0 
     css = url_for('static', filename='micss.css')
-    #cambiar cancion
+    template = env.get_template('spoti.html')
+    if(cancionActual != " "):
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css )
+    else:
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css )
+
+
+
+@app.route('/Play_Previous', methods=["GET","POST"]) #<-- Ruta para cambiar a la cancion anterior
+def Play_Previous():
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if(request.method == "POST"):
-        if 'Play Previous' in request.form:
+        if 'Play_Previous' in request.form:
             if(cancionActual.nombre != ultimaCancion.nombre):
                 cancionActual = ultimaCancion
             else:
@@ -221,100 +235,121 @@ def index():
             start_time = time.time()
             cola_a_Lista()
             print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
-        elif 'Play Next' in request.form:
-            if colaCanciones.is_empty1() == True:
-                if(ultimaCancion.next == listadoCanciones.head or ultimaCancion.next is None):
-                    cancionActual = listadoCanciones.head
-                    ultimaCancion = cancionActual
-                else:
-                    cancionActual = ultimaCancion.next
-                    ultimaCancion = cancionActual
-            else:
-                cancionActual = colaCanciones.dequeue()
-            start_time = time.time()
-            cola_a_Lista()
-            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
-        elif 'play nueva' in request.form:
-            cancion_nueva = request.form['play nueva']
-            if cancionActual != cancion_nueva:    
-                cancion = listadoCanciones.head
-                while (True):
-                    if cancion.next is not None or cancion.next != listadoCanciones.head:
-                        if cancion_nueva == cancion.nombre:
-                            cancionActual = cancion
-                            ultimaCancion = cancionActual
-                            break
-                        else:
-                            cancion = cancion.next
-                    else:
-                        break
-            else:
-                pass
-            
-        #Agregar a la cola
-        elif 'agregar' in request.form:
-            cancion_nueva = request.form['agregar']
+    return redirect(url_for('index'), 301)
 
-            for nodo in listadoCanciones:
-                if nodo.nombre == cancion_nueva:
-                    n = Cancion(nodo.nombre, nodo.artista, nodo.album)
-                    colaCanciones.enqueue(n)
-                    comprobadorQueueTrue(cancion_nueva)
-                    break
-                else:
-                    nodo = nodo.next
-            start_time = time.time()
-            cola_a_Lista()
-            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
-        #se reproduce la primera cancion
-        elif 'play' in request.form:
-            if cancionActual == " ":
+
+@app.route('/Play_Next', methods=["GET","POST"]) #<-- Ruta para cambiar a la siguiente cancion
+def Play_Next():
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    if'Play_Next' in request.form:
+        if colaCanciones.is_empty1() == True:
+            if(ultimaCancion.next == listadoCanciones.head or ultimaCancion.next is None):
                 cancionActual = listadoCanciones.head
                 ultimaCancion = cancionActual
-            #xCancion = Cancion("Levitating", "Dua Lipa", "Future Nostalgia")
-            #colaCanciones.enqueue(xCancion)
-            #deletequeue(xCancion.nombre, colaCanciones.head)
-        elif 'delete_queue' in request.form:
-            cancion_eliminar = request.form['delete_queue']
-            cancion = colaCanciones.head
-            start_time = time.time()
-            deletequeue(cancion_eliminar, cancion)
-            print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
-            start_time = time.time()
-            cola_a_Lista()
-            print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
-        elif 'delete_list' in request.form:
-            cancion_eliminar = request.form['delete_list']
+            else:
+                cancionActual = ultimaCancion.next
+                ultimaCancion = cancionActual
+        else:
+            cancionActual = colaCanciones.dequeue()
+        start_time = time.time()
+        cola_a_Lista()
+        print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
+
+
+@app.route('/play_nueva', methods=["GET","POST"]) #<-- Ruta para reproducir una cancion especifica
+def play_nueva():
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    if 'play_nueva' in request.form:
+        cancion_nueva = request.form['play_nueva']
+        if cancionActual != cancion_nueva:    
             cancion = listadoCanciones.head
-            start_time = time.time()
-            deletequeue(cancion_eliminar, colaCanciones.head)
-            print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
-            start_time = time.time()
-            deletelist(cancion_eliminar, cancion)
-            print("Time en 'deletelist': %s  seconds " %(time.time() - start_time))
-            start_time = time.time()
-            actulizarListaCanciones()
-            print("actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
-        elif 'añadir_cancion' in request.form:
-            nombre_cancion = request.form['cancion']
-            artista = request.form['autor']
-            album = request.form['album']
-            start_time = time.time()
-            añadirCancion(nombre_cancion,artista,album)
-            print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
-            start_time = time.time()
-            actulizarListaCanciones()
-            print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
+            while (True):
+                if cancion.next is not None or cancion.next != listadoCanciones.head:
+                    if cancion_nueva == cancion.nombre:
+                        cancionActual = cancion
+                        ultimaCancion = cancionActual
+                        break
+                    else:
+                        cancion = cancion.next
+                else:
+                    break
         else:
             pass
+    return redirect(url_for('index'), 301)
 
-        template = env.get_template('spoti.html')
-        if(cancionActual != " "):
-            return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css )
-        else:
-            return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css )
-    template = env.get_template('spoti.html')
-    return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---", style_sheet=css)
+@app.route('/agregar', methods=["GET","POST"]) #<-- Ruta para agregar una cancion a la cola
+def agregar():
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    if 'agregar' in request.form:
+        cancion_nueva = request.form['agregar']
+        for nodo in listadoCanciones:
+            if nodo.nombre == cancion_nueva:
+                n = Cancion(nodo.nombre, nodo.artista, nodo.album)
+                colaCanciones.enqueue(n)
+                comprobadorQueueTrue(cancion_nueva)
+                break
+            else:
+                nodo = nodo.next
+        start_time = time.time()
+        cola_a_Lista()
+        print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
+
+@app.route('/play', methods=["GET","POST"]) #<-- Ruta para reproducir la primera cancion de la lista
+def play():
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    if 'play' in request.form:
+        if cancionActual == " ":
+            cancionActual = listadoCanciones.head
+            ultimaCancion = cancionActual
+    return redirect(url_for('index'), 301)
+
+@app.route('/delete_queue', methods=["GET","POST"]) #<-- Ruta para eliminar de la cola
+def delete_queue():
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    if 'delete_queue' in request.form:
+        cancion_eliminar = request.form['delete_queue']
+        cancion = colaCanciones.head
+        start_time = time.time()
+        deletequeue(cancion_eliminar, cancion)
+        print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
+        start_time = time.time()
+        cola_a_Lista()
+        print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
+
+@app.route('/delete_list', methods=["GET","POST"]) #<-- Ruta para eliminar de la lista
+def delete_list():
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    if 'delete_list' in request.form:
+        cancion_eliminar = request.form['delete_list']
+        cancion = listadoCanciones.head
+        start_time = time.time()
+        deletequeue(cancion_eliminar, colaCanciones.head)
+        print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
+        start_time = time.time()
+        deletelist(cancion_eliminar, cancion)
+        print("Time en 'deletelist': %s  seconds " %(time.time() - start_time))
+        start_time = time.time()
+        actulizarListaCanciones()
+        print("actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
+
+@app.route('/añadir_cancion', methods=["GET","POST"]) #<-- Ruta para añadir una nueva cancion al CSV
+def añadir_cancion():
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    if 'añadir_cancion' in request.form:
+        nombre_cancion = request.form['cancion']
+        artista = request.form['autor']
+        album = request.form['album']
+        start_time = time.time()
+        añadirCancion(nombre_cancion,artista,album)
+        print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
+        start_time = time.time()
+        actulizarListaCanciones()
+        print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
 
 if __name__ == '__main__':
     start_time = time.time()
