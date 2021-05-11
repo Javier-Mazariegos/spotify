@@ -22,8 +22,6 @@ cancionActual = " "
 ultimaCancion = None
 
 
-
-
 @profile
 def añadirCancion(nombre,artista,album)-> None:
     global listadoCanciones
@@ -350,6 +348,92 @@ def añadir_cancion():
         actulizarListaCanciones()
         print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
+
+
+# <=========================================== Rutas para hacer pruebas en jmeter ================================================================>
+
+
+@app.route('/play_nueva_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para reproducir una cancion especifica
+def play_nueva_Test(test_cancion = None):
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    cancion_nueva = test_cancion
+    if cancionActual != cancion_nueva:    
+        cancion = listadoCanciones.head
+        while (True):
+            if cancion.next is not None or cancion.next != listadoCanciones.head:
+                if cancion_nueva == cancion.nombre:
+                    cancionActual = cancion
+                    ultimaCancion = cancionActual
+                    break
+                else:
+                    cancion = cancion.next
+            else:
+                break
+    else:
+        pass
+    return redirect(url_for('index'), 301)
+
+@app.route('/agregar_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para agregar una cancion a la cola
+def agregar_Test(test_cancion = None):
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    cancion_nueva = test_cancion
+    for nodo in listadoCanciones:
+        if nodo.nombre == cancion_nueva:
+            n = Cancion(nodo.nombre, nodo.artista, nodo.album)
+            colaCanciones.enqueue(n)
+            comprobadorQueueTrue(cancion_nueva)
+            break
+        else:
+            nodo = nodo.next
+    start_time = time.time()
+    cola_a_Lista()
+    print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
+
+
+@app.route('/delete_queue_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para eliminar de la cola
+def delete_queue_Test(test_cancion = None):
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    cancion_eliminar = test_cancion
+    cancion = colaCanciones.head
+    start_time = time.time()
+    deletequeue(cancion_eliminar, cancion)
+    print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
+    start_time = time.time()
+    cola_a_Lista()
+    print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
+
+@app.route('/delete_list_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para eliminar de la lista
+def delete_list_Test(test_cancion = None):
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    cancion_eliminar =test_cancion
+    cancion = listadoCanciones.head
+    start_time = time.time()
+    deletequeue(cancion_eliminar, colaCanciones.head)
+    print("Time en 'deletequeue': %s  seconds " %(time.time() - start_time))
+    start_time = time.time()
+    deletelist(cancion_eliminar, cancion)
+    print("Time en 'deletelist': %s  seconds " %(time.time() - start_time))
+    start_time = time.time()
+    actulizarListaCanciones()
+    print("actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
+
+@app.route('/añadir_cancion_Test/<test_cancion_nombre>/<test_cancion_autor>/<test_cancion_album>', methods=["GET","POST"]) #<-- Ruta para añadir una nueva cancion al CSV
+def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,test_cancion_album = None):
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    nombre_cancion = test_cancion_nombre
+    artista = test_cancion_autor
+    album = test_cancion_album
+    start_time = time.time()
+    añadirCancion(nombre_cancion,artista,album)
+    print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
+    start_time = time.time()
+    actulizarListaCanciones()
+    print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
+    return redirect(url_for('index'), 301)
+
 
 if __name__ == '__main__':
     start_time = time.time()
