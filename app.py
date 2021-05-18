@@ -84,18 +84,18 @@ def guardar_en_Array(cancion_hash: str, cancion: Cancion):
             if(len(posicion) == 2):
                 break
     posicion = int(posicion)
-
     if buscador_canciones[posicion] == -1:
         buscador_canciones[posicion] = cancion
     else:
-        verificador = isinstance(buscador_canciones[posicion], str)
+        verificador = isinstance(buscador_canciones[posicion], Cancion)
         if verificador == True:
-            buscador_canciones[posicion] = [buscador_canciones[posicion]]
-            buscador_canciones[posicion].append(cancion)
-        else:
-            buscador_canciones[posicion].append(cancion)
 
-def buscar_en_Array(cancion_hash: str, cancion: Cancion):
+            buscador_canciones[posicion] = {buscador_canciones[posicion].nombre: buscador_canciones[posicion]}
+            buscador_canciones[posicion][cancion.nombre] = cancion
+        else:
+            buscador_canciones[posicion][cancion.nombre] = cancion
+
+def buscar_en_Array(cancion_hash: str, cancion: str):
     global buscador_canciones
     posicion = ""
     for x in cancion_hash:
@@ -108,9 +108,18 @@ def buscar_en_Array(cancion_hash: str, cancion: Cancion):
     if buscador_canciones[posicion] == -1:
         return "La cancion no existe"
     else:
-        #verificador = isinstance(buscador_canciones[posicion], str)
-        #if verificador == True:
-        pass
+        verificador = isinstance(buscador_canciones[posicion], Cancion)
+        if verificador == True:
+            if buscador_canciones[posicion].nombre == cancion:
+                return buscador_canciones[posicion]
+            else:
+                return"La cancion no existe"
+        else:
+
+            if cancion in buscador_canciones[posicion].keys():
+                return buscador_canciones[posicion][cancion]
+            else:
+                return "La cancion no existe"
 
 
 
@@ -483,8 +492,19 @@ def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,te
 
 
 if __name__ == '__main__':
+  
     start_time = time.time()
     cargarCanciones()
     print("Time en 'cargarCanciones': %s  seconds " %(time.time() - start_time))
-
+    #====================Pruebas del buscador============================================
+    #iniciar_arreglo()
+    #guardar_en_Array("sdfsdf1sdfdsfdsf1",Cancion("Ejemplo1","ArtistaEjemplo","AlbumEjemplo"))
+    #guardar_en_Array("sdfsdf1sdfdsfdsf2",Cancion("Ejemplo1","ArtistaEjemplo","AlbumEjemplo"))
+    #print(buscador_canciones[12].nombre)
+    #guardar_en_Array("sdfsdf1sdfdsfdsf2",Cancion("Ejemplo2","ArtistaEjemplo","AlbumEjemplo"))
+    #print(buscador_canciones[12])
+    #guardar_en_Array("sdfsdf1sdfdsfdsf2",Cancion("Ejemplo3","ArtistaEjemplo","AlbumEjemplo"))
+    #print(buscador_canciones[12])
+    #print("Resultados del buscador")
+    #print(buscar_en_Array("sdfsdf1sdfdsfdsf1", "Ejj3"))
     app.run(debug=True)
