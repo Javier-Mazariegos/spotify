@@ -20,7 +20,12 @@ listaCanciones = []
 colaLista = []
 cancionActual = " "
 ultimaCancion = None
+buscador_canciones = []
 
+def iniciar_arreglo():
+    global buscador_canciones
+    for i in range(100):
+        buscador_canciones.append(-1)
 
 @profile
 def añadirCancion(nombre,artista,album)-> None:
@@ -69,6 +74,48 @@ def contadorQueue(nombreCancion):
             else:
                 break
     return comprobacion
+
+def guardar_en_Array(cancion_hash: str, cancion: Cancion):
+    global buscador_canciones
+    posicion = ""
+    for x in cancion_hash:
+        if x.isnumeric():
+            posicion += x
+            if(len(posicion) == 2):
+                break
+    posicion = int(posicion)
+
+    if buscador_canciones[posicion] == -1:
+        buscador_canciones[posicion] = cancion
+    else:
+        verificador = isinstance(buscador_canciones[posicion], str)
+        if verificador == True:
+            buscador_canciones[posicion] = [buscador_canciones[posicion]]
+            buscador_canciones[posicion].append(cancion)
+        else:
+            buscador_canciones[posicion].append(cancion)
+
+def buscar_en_Array(cancion_hash: str, cancion: Cancion):
+    global buscador_canciones
+    posicion = ""
+    for x in cancion_hash:
+        if x.isnumeric():
+            posicion += x
+            if(len(posicion) == 2):
+                break
+    posicion = int(posicion)
+
+    if buscador_canciones[posicion] == -1:
+        return "La cancion no existe"
+    else:
+        #verificador = isinstance(buscador_canciones[posicion], str)
+        #if verificador == True:
+        pass
+
+
+
+
+
 
 def comprobadorListadoTrue(nombreCancion):
     resultado = contadorListado(nombreCancion)
@@ -439,4 +486,5 @@ if __name__ == '__main__':
     start_time = time.time()
     cargarCanciones()
     print("Time en 'cargarCanciones': %s  seconds " %(time.time() - start_time))
+
     app.run(debug=True)
