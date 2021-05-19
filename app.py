@@ -7,6 +7,8 @@ import unittest
 import time 
 from linkedlist import Cancion, LinkedList
 from queue import Queue
+from sh1 import SHA1Hash
+import argparse
 
 
 File_loader = FileSystemLoader("templates")
@@ -260,12 +262,13 @@ def deletelist(cancion_eliminar, cancion):
 
 #principal
 @app.route('/', methods=["GET","POST"], endpoint='index')
-@profile
+#@profile
 def index():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     contador = 0 
     css = url_for('static', filename='micss.css')
     template = env.get_template('spoti.html')
+    print("entre al index")
     if(cancionActual != " "):
         return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css )
     else:
@@ -404,7 +407,29 @@ def añadir_cancion():
         actulizarListaCanciones()
         print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
-
+#@app.route('/buscar_cancion', methods=["GET","POST"])
+def buscar_cancion():
+    var = ["hola", "como", "hola "]
+    for n in range(len(var)):
+    # unittest.main()
+        parser = argparse.ArgumentParser(description="Process some strings or files")
+        parser.add_argument(
+            "--string",
+            dest="input_string",
+            default=var[n],
+            help="Hash the string",
+        )
+        #parser.add_argument("--file", dest="input_file", help="Hash contents of a file")
+        args = parser.parse_args()
+        input_string = args.input_string
+        # In any case hash input should be a bytestring
+        #if args.input_file:
+        #   with open(args.input_file, "rb") as f:
+            #      hash_input = f.read()
+        #else:
+        hash_input = bytes(input_string, "utf-8")
+        print(SHA1Hash(hash_input).final_hash())
+    #return redirect(url_for('index'), 301)
 
 # <=========================================== Rutas para hacer pruebas en jmeter ================================================================>
 
@@ -492,7 +517,7 @@ def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,te
 
 
 if __name__ == '__main__':
-  
+    buscar_cancion()
     start_time = time.time()
     cargarCanciones()
     print("Time en 'cargarCanciones': %s  seconds " %(time.time() - start_time))
