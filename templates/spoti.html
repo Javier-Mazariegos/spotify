@@ -6,11 +6,100 @@
       <input type="text" placeholder="Nombre del album" name="album"/>
       <button type="submit" class="button-dark" name="añadir_cancion">Guardar</button>
     </form>
+    <br>
+    <form action="/buscar_cancion" method="POST">
+      <input type="text" placeholder="Nombre Cancion" name="cancion"/>
+      <button type="submit" class="button-dark" name="buscar_cancion">Buscar Cancion</button>
+    </form>
       
     
     
   </section>
     <div class="content__middle">
+      <!-- /////////////////////// BUSCAR CANCION -->
+      {%if r == true%}
+      <div class="overview__albums">
+                
+        <div class="overview__albums__head">
+        
+          <span class="section-title">Cancion</span>
+         
+        
+        </div>
+        
+        <div class="album">
+          
+          <div class="album__tracks">
+          
+            <div class="tracks">
+              
+              <div class="tracks__heading">
+              
+                <div class="tracks__heading__number">#</div>
+                
+                <div class="tracks__heading__title">Song</div>
+              </div>
+              <div class="track">
+                <div class="track__number">1</div>
+                <div class="track__title">{{find.nombre}}</div>
+                <div class="track__explicit">
+                  <form id="myFormFind" action="" method="POST">
+                    <button class="botonplay" id="play {{find.nombre}}" name ="play_nueva" value="{{find.nombre}}" onclick ="document.getElementById('myFormFind').action = '/play_nueva'; document.getElementById('myFormFind').submit();">PLAY</button>
+                    <input type="hidden" name="play_nueva" value="{{find.nombre}}">
+                    <button id="cola {{find.nombre}}" name="agregar" value="{{find.nombre}}" onclick ="document.getElementById('myFormFind').action = '/agregar'; document.getElementById('myFormFind').submit(); ">AGREGAR A LA COLA</button>
+                    <input type="hidden" name="agregar" value="{{find.nombre}}">
+                    <button class="botoneliminar" id="eliminar {{find.nombre}}" name ="delete_list" value="{{find.nombre}}" onclick ="document.getElementById('myFormFind').action = '/delete_list';document.getElementById('myFormFind').submit();">ELIMINAR</button>
+                    <input type="hidden" name="delete_list" value="{{find.nombre}}">
+                  </form>
+
+                </div>
+              </div>
+
+
+            </div>
+            
+          </div>
+          
+        </div>
+        
+      </div>  
+      {% else %}
+      <div class="overview__albums">
+                
+        <div class="overview__albums__head">
+        
+          <span class="section-title">Cancion</span>
+         
+        
+        </div>
+        
+        <div class="album">
+          
+          <div class="album__tracks">
+          
+            <div class="tracks">
+              
+              <div class="tracks__heading">
+              
+                <div class="tracks__heading__number">#</div>
+                
+                <div class="tracks__heading__title">Song</div>
+              </div>
+              <div class="track">
+                <div class="track__number">1</div>
+                <div class="track__title">Not find</div>
+              </div>
+
+
+            </div>
+            
+          </div>
+          
+        </div>
+        
+      </div>  
+      {%endif%}
+      <!-- /////////////////////// BUSCAR CANCION -->
         <div class="artist__info__actions">
                 <br>
                 <br>

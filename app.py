@@ -3,8 +3,7 @@ from memory_profiler import profile
 from flask import Flask, request, redirect
 from jinja2 import Template, Environment, FileSystemLoader
 import csv
-import unittest
-import time 
+import time
 from linkedlist import Cancion, LinkedList
 from queue import Queue
 from sh1 import SHA1Hash
@@ -22,16 +21,16 @@ listaCanciones = []
 colaLista = []
 cancionActual = " "
 ultimaCancion = None
-buscador_canciones = []
-
-def iniciar_arreglo():
-    global buscador_canciones
-    for i in range(100):
-        buscador_canciones.append(-1)
-
+buscador_canciones = {}
+ENCONTRADA = False
+find = None
+def comprimir(n: str):
+    n = n.lower()
+    n = n.replace(" ", "")
+    return n
 @profile
 def añadirCancion(nombre,artista,album)-> None:
-    global listadoCanciones
+    global listadoCanciones, buscador_canciones
     datos = ["","",""]
     datos[0] = nombre
     datos[1] = artista
@@ -41,7 +40,21 @@ def añadirCancion(nombre,artista,album)-> None:
         writer.writerow('\n')
         writer.writerow(datos)
     #listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
-    listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
+    can = Cancion(datos[0],datos[1],datos[2])
+    listadoCanciones.insertar(can)
+    nombrehash = comprimir(nombre)
+    parser = argparse.ArgumentParser(description="Process some strings or files")
+    parser.add_argument(
+        "--string",
+        dest="input_string",
+        default=nombrehash,
+        help="Hash the string",
+    )
+    args = parser.parse_args()
+    input_string = args.input_string
+    hash_input = bytes(input_string, "utf-8")
+    hash_var = (SHA1Hash(hash_input).final_hash())
+    buscador_canciones[hash_var] = can
     comprobadorListadoTrue(datos[0])
 
 def contadorListado(nombreCancion):
@@ -76,53 +89,7 @@ def contadorQueue(nombreCancion):
             else:
                 break
     return comprobacion
-
-def guardar_en_Array(cancion_hash: str, cancion: Cancion):
-    global buscador_canciones
-    posicion = ""
-    for x in cancion_hash:
-        if x.isnumeric():
-            posicion += x
-            if(len(posicion) == 2):
-                break
-    posicion = int(posicion)
-    if buscador_canciones[posicion] == -1:
-        buscador_canciones[posicion] = cancion
-    else:
-        verificador = isinstance(buscador_canciones[posicion], Cancion)
-        if verificador == True:
-
-            buscador_canciones[posicion] = {buscador_canciones[posicion].nombre: buscador_canciones[posicion]}
-            buscador_canciones[posicion][cancion.nombre] = cancion
-        else:
-            buscador_canciones[posicion][cancion.nombre] = cancion
-
-def buscar_en_Array(cancion_hash: str, cancion: str):
-    global buscador_canciones
-    posicion = ""
-    for x in cancion_hash:
-        if x.isnumeric():
-            posicion += x
-            if(len(posicion) == 2):
-                break
-    posicion = int(posicion)
-
-    if buscador_canciones[posicion] == -1:
-        return "La cancion no existe"
-    else:
-        verificador = isinstance(buscador_canciones[posicion], Cancion)
-        if verificador == True:
-            if buscador_canciones[posicion].nombre == cancion:
-                return buscador_canciones[posicion]
-            else:
-                return"La cancion no existe"
-        else:
-
-            if cancion in buscador_canciones[posicion].keys():
-                return buscador_canciones[posicion][cancion]
-            else:
-                return "La cancion no existe"
-
+ 
 
 
 
@@ -169,7 +136,7 @@ def eliminarCancion():
 
 @profile
 def cargarCanciones():
-    global listadoCanciones, listaCanciones
+    global listadoCanciones, listaCanciones, buscador_canciones
     with open('listado.csv') as File:
         reader = csv.reader(File, delimiter=',', quotechar=',',quoting=csv.QUOTE_MINIMAL)
         for row in reader:
@@ -177,8 +144,22 @@ def cargarCanciones():
             #if contador == 0:
             #    listadoCanciones.push(datos[0],datos[1],datos[2])
             #else:
-            listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
-            listadoCanciones.insertar(Cancion(datos[0],datos[1],datos[2]))
+            can = Cancion(datos[0],datos[1],datos[2])
+            listaCanciones.append(can)
+            listadoCanciones.insertar(can)
+            nombrehash = comprimir(can.nombre)
+            parser = argparse.ArgumentParser(description="Process some strings or files")
+            parser.add_argument(
+                "--string",
+                dest="input_string",
+                default=nombrehash,
+                help="Hash the string",
+            )
+            args = parser.parse_args()
+            input_string = args.input_string
+            hash_input = bytes(input_string, "utf-8")
+            hash_var = (SHA1Hash(hash_input).final_hash())
+            buscador_canciones[hash_var] = can
             comprobadorListadoTrue(datos[0])
 
 @profile
@@ -264,15 +245,15 @@ def deletelist(cancion_eliminar, cancion):
 @app.route('/', methods=["GET","POST"], endpoint='index')
 #@profile
 def index():
-    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista, ENCONTRADA, find
     contador = 0 
     css = url_for('static', filename='micss.css')
     template = env.get_template('spoti.html')
     print("entre al index")
     if(cancionActual != " "):
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css )
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css, r = ENCONTRADA, find = find)
     else:
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css )
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css, r=ENCONTRADA, find = find)
 
 
 
@@ -407,29 +388,47 @@ def añadir_cancion():
         actulizarListaCanciones()
         print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
-#@app.route('/buscar_cancion', methods=["GET","POST"])
+def prueba():
+    nombre_cancion = "Back In Black"
+    nombre_cancion = comprimir(nombre_cancion)
+    parser = argparse.ArgumentParser(description="Process some strings or files")
+    parser.add_argument(
+        "--string",
+        dest="input_string",
+        default=nombre_cancion,
+        help="Hash the string",
+    )
+    args = parser.parse_args()
+    input_string = args.input_string
+    hash_input = bytes(input_string, "utf-8")
+    hash_var = (SHA1Hash(hash_input).final_hash())
+    print(hash_var)
+@app.route('/buscar_cancion', methods=["GET","POST"]) #<-- Ruta para buscar una cancion
 def buscar_cancion():
-    var = ["hola", "como", "hola "]
-    for n in range(len(var)):
-    # unittest.main()
+    global ENCONTRADA
+    if 'buscar_cancion' in request.form:
+        nombre_cancion = request.form['cancion']
+        nombre_cancion = comprimir(nombre_cancion)
+        print(nombre_cancion)
         parser = argparse.ArgumentParser(description="Process some strings or files")
         parser.add_argument(
             "--string",
             dest="input_string",
-            default=var[n],
+            default=nombre_cancion,
             help="Hash the string",
         )
-        #parser.add_argument("--file", dest="input_file", help="Hash contents of a file")
         args = parser.parse_args()
         input_string = args.input_string
-        # In any case hash input should be a bytestring
-        #if args.input_file:
-        #   with open(args.input_file, "rb") as f:
-            #      hash_input = f.read()
-        #else:
         hash_input = bytes(input_string, "utf-8")
-        print(SHA1Hash(hash_input).final_hash())
-    #return redirect(url_for('index'), 301)
+        hash_var = (SHA1Hash(hash_input).final_hash())
+        global buscador_canciones, find
+        if buscador_canciones.get(hash_var) is not None:
+            ENCONTRADA = True
+            find = buscador_canciones[hash_var]
+        else:
+            ENCONTRADA = False
+            find = None
+    return redirect(url_for('index'), 301)
 
 # <=========================================== Rutas para hacer pruebas en jmeter ================================================================>
 
@@ -517,7 +516,7 @@ def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,te
 
 
 if __name__ == '__main__':
-    buscar_cancion()
+    #buscar_cancion()
     start_time = time.time()
     cargarCanciones()
     print("Time en 'cargarCanciones': %s  seconds " %(time.time() - start_time))
