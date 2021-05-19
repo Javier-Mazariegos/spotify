@@ -1,3 +1,6 @@
+from os import curdir, set_blocking
+
+
 class Cancion:
     def __init__(self, nombre, artista, album):
         self.nombre = nombre
@@ -33,3 +36,7 @@ class LinkedList:
                 pass
             current_node.next = cancion
             cancion.previous = current_node
+    def last(self):
+        for current_node in self:
+            pass
+        return current_node

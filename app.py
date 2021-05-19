@@ -54,7 +54,7 @@ def añadirCancion(nombre,artista,album)-> None:
     input_string = args.input_string
     hash_input = bytes(input_string, "utf-8")
     hash_var = (SHA1Hash(hash_input).final_hash())
-    buscador_canciones[hash_var] = can
+    buscador_canciones[hash_var] = listadoCanciones.last()
     comprobadorListadoTrue(datos[0])
 
 def contadorListado(nombreCancion):
@@ -159,7 +159,7 @@ def cargarCanciones():
             input_string = args.input_string
             hash_input = bytes(input_string, "utf-8")
             hash_var = (SHA1Hash(hash_input).final_hash())
-            buscador_canciones[hash_var] = can
+            buscador_canciones[hash_var] = listadoCanciones.last()
             comprobadorListadoTrue(datos[0])
 
 @profile
@@ -281,11 +281,15 @@ def Play_Next():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if'Play_Next' in request.form:
         if colaCanciones.is_empty1() == True:
-            if(ultimaCancion.next == listadoCanciones.head or ultimaCancion.next is None):
-                cancionActual = listadoCanciones.head
-                ultimaCancion = cancionActual
+            if ultimaCancion != None:
+                if( ultimaCancion.next == listadoCanciones.head or ultimaCancion.next is None):
+                    cancionActual = listadoCanciones.head
+                    ultimaCancion = cancionActual
+                else:
+                    cancionActual = ultimaCancion.next
+                    ultimaCancion = cancionActual
             else:
-                cancionActual = ultimaCancion.next
+                cancionActual = listadoCanciones.head
                 ultimaCancion = cancionActual
         else:
             cancionActual = colaCanciones.dequeue()
