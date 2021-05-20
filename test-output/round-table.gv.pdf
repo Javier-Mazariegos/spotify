@@ -1,0 +1,68 @@
+// The Round Table
+digraph {
+	A [label=A]
+	B [label=B]
+	C [label=C]
+	D [label=D]
+	E [label=E]
+	F [label=F]
+	G [label=G]
+	H [label=H]
+	I [label=I]
+	J [label=J]
+	K [label=K]
+	L [label=L]
+	M [label=M]
+	N [label=N]
+	O [label=O]
+	P [label=P]
+	A -> I
+	A -> E
+	B -> P
+	B -> J
+	B -> F
+	C -> D
+	C -> G
+	C -> H
+	D -> C
+	D -> G
+	D -> H
+	E -> I
+	E -> P
+	E -> B
+	E -> A
+	F -> K
+	F -> L
+	G -> C
+	G -> D
+	G -> O
+	G -> N
+	H -> K
+	H -> L
+	I -> E
+	I -> P
+	I -> P
+	J -> K
+	J -> L
+	K -> L
+	K -> D
+	L -> D
+	L -> C
+	L -> G
+	L -> N
+	M -> K
+	M -> A
+	N -> M
+	N -> A
+	N -> O
+	N -> G
+	N -> C
+	N -> L
+	O -> N
+	O -> M
+	O -> A
+	P -> J
+	P -> E
+	P -> I
+	P -> B
+}
