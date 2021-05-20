@@ -8,13 +8,16 @@ from linkedlist import Cancion, LinkedList
 from queue import Queue
 from sh1 import SHA1Hash
 import argparse
+from graph import Graph
+from graphviz import Digraph
 
 
 File_loader = FileSystemLoader("templates")
 env = Environment(loader=File_loader)
 app = Flask(__name__)
 
-
+dot = Digraph(comment='The Round Table')
+G2 = Graph()
 listadoCanciones = LinkedList()
 colaCanciones = Queue()
 listaCanciones = []
@@ -543,7 +546,68 @@ def buscar_cancion(nombre = None):
         ENCONTRADA = False
         find = None
     return redirect(url_for('index'), 301)
+
 if __name__ == '__main__':
+    nodes = ["A", "B", "C", "D", "E", "F", "G", "H","I", "J","K", "L", "M", "N", "O","P"]
+    edges = [("A", "I"), 
+            ("A", "E"),
+            ("B", "P"),
+            ("B", "J"),
+            ("B", "F"),
+            ("C", "D"),
+            ("C", "G"),
+            ("C", "H"),
+            ("D", "C"),
+            ("D", "G"),
+            ("D", "H"),
+            ("E", "I"),
+            ("E", "P"),
+            ("E", "B"),
+            ("E", "A"),
+            ("F", "K"),
+            ("F", "L"),
+            ("G", "C"),
+            ("G", "D"),
+            ("G", "O"),
+            ("G", "N"),
+            ("H", "K"),
+            ("H", "L"),
+            ("I", "E"),
+            ("I", "P"),
+            ("I", "P"),
+            ("J", "K"),
+            ("J", "L"),
+            ("K", "L"),
+            ("K", "D"),
+            ("L", "D"),
+            ("L", "C"),
+            ("L", "G"),
+            ("L", "N"),
+            ("M", "K"),
+            ("M", "A"),
+            ("N", "M"),
+            ("N", "A"),
+            ("N", "O"),
+            ("N", "G"),
+            ("N", "C"),
+            ("N", "L"),
+            ("O", "N"),
+            ("O", "M"),
+            ("O", "A"), 
+            ("P", "J"),
+            ("P", "E"),
+            ("P", "I"),
+            ("P", "B")
+            ]
+
+    for node in nodes:
+        G2.add_node(node)
+        dot.node(node,node)
+
+    for edge in edges:
+        G2.add_edge(edge[0], edge[1])
+        dot.edge(edge[0],edge[1])
+    print(dot.source)
     #buscar_cancion()
     start_time = time.time()
     cargarCanciones()
