@@ -166,24 +166,33 @@
   
   </section>
   
-  <section>
+  <section class="header">
       <div class="content1">
       <form action="" method="POST" class="f" id="form1">
         <button class="botonPlay_Previous" style="font-size:25px;" name="Play_Previous" onclick ="document.getElementById('form1').action = '/Play_Previous'; document.getElementById('form1').submit();">&#x23EE;</button>
-            <p style="color:#181818">  --   </p>
+            <p style="color:#282828;">  --   </p>
             <button class="botonplay1" style="font-size:25px;" name="play" onclick ="document.getElementById('form1').action = '/play'; document.getElementById('form1').submit();">&#x23F5;</button>
-            <p style="color:#181818">  --   </p>
+            <p style="color:#282828;">  --   </p>
             <button class="botonPlay_Next" style="font-size:25px;"  name="Play_Next" onclick ="document.getElementById('form1').action = '/Play_Next'; document.getElementById('form1').submit();">&#x23ED;</button>
       </form>
-          <p style="color:#181818">  --------   </p>
+          <p style="color:#282828;">  --------   </p>
           <p style="color:aliceblue"> {{nombreCancion}} </p>      
     </div>
     
     
   </section> 
-  <section class="content__right">
+  <section >
     <div class="content__right">
-      <img src="{{foto}}"style="width:500px;height:600px;">
+      <img src="{{foto}}"style="width:450px;height:450px;">
+    </div>
+    <div class="content1">
+      <form action="" method="POST" class="f" id="form1">
+        <button class="botonPlay_Previous" style="font-size:25px;" name="Play_Previous" onclick ="document.getElementById('form1').action = '/Play_Previous'; document.getElementById('form1').submit();">&#x23EE;</button>
+            <p style="color:#282828;">  --   </p>
+            <button class="botonplay1" style="font-size:25px;" name="play" onclick ="document.getElementById('form1').action = '/play'; document.getElementById('form1').submit();">&#x23F5;</button>
+            <p style="color:#282828;">  --   </p>
+            <button class="botonPlay_Next" style="font-size:25px;"  name="Play_Next" onclick ="document.getElementById('form1').action = '/Play_Next'; document.getElementById('form1').submit();">&#x23ED;</button>
+      </form>
     </div>
   </section>
   
