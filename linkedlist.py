@@ -1,5 +1,3 @@
-from os import curdir, set_blocking
-
 
 class Cancion:
     def __init__(self, nombre, artista, album):

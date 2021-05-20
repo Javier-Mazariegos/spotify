@@ -54,3 +54,29 @@ class Graph:
                     if not shortest or len(newpath) < len(shortest):
                         shortest = newpath
         return shortest
+
+
+
+
+G = Graph()
+G.add_node("A")
+G.add_node("B")
+G.add_node("C")
+G.add_node("D")
+G.add_node("E")
+G.add_edge("A", "B")
+G.add_edge("A", "C")
+G.add_edge("B", "C")
+G.add_edge("D", "B")
+G.add_edge("D", "E")
+G.add_edge("C", "D")
+G.add_edge("C", "E")
+
+print(G)
+
+print("================Todos los posibles caminos==========================")
+print(G.find_all_paths("A","E"))
+print("================El camino mas corto==========================")
+corto = G.find_shortest_path("A","E")
+print(corto)
+print("El tiempo del camino mas corto es: " +str((len(corto)-1)*5))
