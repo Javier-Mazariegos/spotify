@@ -432,7 +432,6 @@ def buscar_cancion():
 
 
 @app.route('/play_nueva_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para reproducir una cancion especifica
-@profile
 def play_nueva_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     cancion_nueva = test_cancion
@@ -453,7 +452,6 @@ def play_nueva_Test(test_cancion = None):
     return redirect(url_for('index'), 301)
 
 @app.route('/agregar_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para agregar una cancion a la cola
-@profile
 def agregar_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     cancion_nueva = test_cancion
@@ -471,7 +469,6 @@ def agregar_Test(test_cancion = None):
     return redirect(url_for('index'), 301)
 
 @app.route('/delete_queue_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para eliminar de la cola
-@profile
 def delete_queue_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     cancion_eliminar = test_cancion
@@ -485,7 +482,7 @@ def delete_queue_Test(test_cancion = None):
     return redirect(url_for('index'), 301)
 
 @app.route('/delete_list_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para eliminar de la lista
-@profile
+
 def delete_list_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     cancion_eliminar =test_cancion
@@ -502,7 +499,7 @@ def delete_list_Test(test_cancion = None):
     return redirect(url_for('index'), 301)
 
 @app.route('/añadir_cancion_Test/<test_cancion_nombre>/<test_cancion_autor>/<test_cancion_album>', methods=["GET","POST"]) #<-- Ruta para añadir una nueva cancion al CSV
-@profile
+
 def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,test_cancion_album = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     nombre_cancion = test_cancion_nombre
@@ -517,8 +514,7 @@ def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,te
     return redirect(url_for('index'), 301)
 
 @app.route('/buscar_cancion/<nombre>', methods=["GET","POST"]) #<-- Ruta para buscar una cancion
-@profile
-def buscar_cancion(nombre = None):
+def buscar_cancion_Test(nombre = None):
     global ENCONTRADA
     nombre_cancion = nombre
     start_time = time.time()
@@ -607,7 +603,7 @@ if __name__ == '__main__':
     for edge in edges:
         G2.add_edge(edge[0], edge[1])
         dot.edge(edge[0],edge[1])
-    print(dot.source)
+    dot.render('./test-output/round-table.gv.pdf', view=True)
     #buscar_cancion()
     start_time = time.time()
     cargarCanciones()
