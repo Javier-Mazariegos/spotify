@@ -260,12 +260,13 @@ def index():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista, ENCONTRADA, find
     contador = 0 
     css = url_for('static', filename='micss.css')
+    imgF = url_for('static', filename='Diagrama de Grafo .png')
     template = env.get_template('spoti.html')
     print("entre al index")
     if(cancionActual != " "):
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css, r = ENCONTRADA, find = find)
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css, r = ENCONTRADA, find = find, foto = imgF)
     else:
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css, r=ENCONTRADA, find = find)
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css, r=ENCONTRADA, find = find, foto = imgF)
 
 @app.route('/Play_Previous', methods=["GET","POST"]) #<-- Ruta para cambiar a la cancion anterior
 def Play_Previous():
@@ -603,7 +604,7 @@ if __name__ == '__main__':
     for edge in edges:
         G2.add_edge(edge[0], edge[1])
         dot.edge(edge[0],edge[1])
-    dot.render('./test-output/round-table.gv.pdf', view=True)
+    #dot.render('./test-output/round-table.gv.pdf', view=True)
     #buscar_cancion()
     start_time = time.time()
     cargarCanciones()
