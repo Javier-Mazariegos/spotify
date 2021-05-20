@@ -91,10 +91,6 @@ def contadorQueue(nombreCancion):
     return comprobacion
  
 
-
-
-
-
 def comprobadorListadoTrue(nombreCancion):
     resultado = contadorListado(nombreCancion)
     assert resultado == True, "Debe ser True"
@@ -223,7 +219,20 @@ def deletequeue(cancion_eliminar, cancion):
 
 @profile
 def deletelist(cancion_eliminar, cancion):
-    global listadoCanciones
+    global listadoCanciones, buscador_canciones
+    nombrehash = comprimir(cancion_eliminar)
+    parser = argparse.ArgumentParser(description="Process some strings or files")
+    parser.add_argument(
+        "--string",
+        dest="input_string",
+        default=nombrehash,
+        help="Hash the string",
+    )
+    args = parser.parse_args()
+    input_string = args.input_string
+    hash_input = bytes(input_string, "utf-8")
+    hash_var = (SHA1Hash(hash_input).final_hash())
+    buscador_canciones.pop(hash_var)
     for nodo in listadoCanciones:
         if (cancion_eliminar == cancion.nombre):
             listadoCanciones.head = cancion.next
@@ -243,7 +252,7 @@ def deletelist(cancion_eliminar, cancion):
 
 #principal
 @app.route('/', methods=["GET","POST"], endpoint='index')
-#@profile
+@profile
 def index():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista, ENCONTRADA, find
     contador = 0 
@@ -254,8 +263,6 @@ def index():
         return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css, r = ENCONTRADA, find = find)
     else:
         return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css, r=ENCONTRADA, find = find)
-
-
 
 @app.route('/Play_Previous', methods=["GET","POST"]) #<-- Ruta para cambiar a la cancion anterior
 def Play_Previous():
@@ -274,7 +281,6 @@ def Play_Previous():
             cola_a_Lista()
             print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
-
 
 @app.route('/Play_Next', methods=["GET","POST"]) #<-- Ruta para cambiar a la siguiente cancion
 def Play_Next():
@@ -297,7 +303,6 @@ def Play_Next():
         cola_a_Lista()
         print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
-
 
 @app.route('/play_nueva', methods=["GET","POST"]) #<-- Ruta para reproducir una cancion especifica
 def play_nueva():
@@ -392,28 +397,14 @@ def añadir_cancion():
         actulizarListaCanciones()
         print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
-def prueba():
-    nombre_cancion = "Back In Black"
-    nombre_cancion = comprimir(nombre_cancion)
-    parser = argparse.ArgumentParser(description="Process some strings or files")
-    parser.add_argument(
-        "--string",
-        dest="input_string",
-        default=nombre_cancion,
-        help="Hash the string",
-    )
-    args = parser.parse_args()
-    input_string = args.input_string
-    hash_input = bytes(input_string, "utf-8")
-    hash_var = (SHA1Hash(hash_input).final_hash())
-    print(hash_var)
+
 @app.route('/buscar_cancion', methods=["GET","POST"]) #<-- Ruta para buscar una cancion
 def buscar_cancion():
     global ENCONTRADA
     if 'buscar_cancion' in request.form:
         nombre_cancion = request.form['cancion']
         nombre_cancion = comprimir(nombre_cancion)
-        print(nombre_cancion)
+        #print(nombre_cancion)
         parser = argparse.ArgumentParser(description="Process some strings or files")
         parser.add_argument(
             "--string",
@@ -438,6 +429,7 @@ def buscar_cancion():
 
 
 @app.route('/play_nueva_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para reproducir una cancion especifica
+@profile
 def play_nueva_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     cancion_nueva = test_cancion
@@ -458,6 +450,7 @@ def play_nueva_Test(test_cancion = None):
     return redirect(url_for('index'), 301)
 
 @app.route('/agregar_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para agregar una cancion a la cola
+@profile
 def agregar_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     cancion_nueva = test_cancion
@@ -474,8 +467,8 @@ def agregar_Test(test_cancion = None):
     print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
 
-
 @app.route('/delete_queue_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para eliminar de la cola
+@profile
 def delete_queue_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     cancion_eliminar = test_cancion
@@ -489,6 +482,7 @@ def delete_queue_Test(test_cancion = None):
     return redirect(url_for('index'), 301)
 
 @app.route('/delete_list_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para eliminar de la lista
+@profile
 def delete_list_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     cancion_eliminar =test_cancion
@@ -505,6 +499,7 @@ def delete_list_Test(test_cancion = None):
     return redirect(url_for('index'), 301)
 
 @app.route('/añadir_cancion_Test/<test_cancion_nombre>/<test_cancion_autor>/<test_cancion_album>', methods=["GET","POST"]) #<-- Ruta para añadir una nueva cancion al CSV
+@profile
 def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,test_cancion_album = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     nombre_cancion = test_cancion_nombre
@@ -518,7 +513,36 @@ def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,te
     print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
 
-
+@app.route('/buscar_cancion/<nombre>', methods=["GET","POST"]) #<-- Ruta para buscar una cancion
+@profile
+def buscar_cancion(nombre = None):
+    global ENCONTRADA
+    nombre_cancion = nombre
+    start_time = time.time()
+    nombre_cancion = comprimir(nombre_cancion)
+    print("Time en 'comprimir': %s  seconds " %(time.time() - start_time))
+    #print(nombre_cancion)
+    parser = argparse.ArgumentParser(description="Process some strings or files")
+    parser.add_argument(
+        "--string",
+        dest="input_string",
+        default=nombre_cancion,
+        help="Hash the string",
+    )
+    args = parser.parse_args()
+    input_string = args.input_string
+    hash_input = bytes(input_string, "utf-8")
+    start_time = time.time()
+    hash_var = (SHA1Hash(hash_input).final_hash())
+    print("Time en 'SHA1Hash.final_hash()': %s  seconds " %(time.time() - start_time))
+    global buscador_canciones, find
+    if buscador_canciones.get(hash_var) is not None:
+        ENCONTRADA = True
+        find = buscador_canciones[hash_var]
+    else:
+        ENCONTRADA = False
+        find = None
+    return redirect(url_for('index'), 301)
 if __name__ == '__main__':
     #buscar_cancion()
     start_time = time.time()
