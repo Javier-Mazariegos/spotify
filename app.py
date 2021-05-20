@@ -406,7 +406,7 @@ def añadir_cancion():
 def buscar_cancion():
     global ENCONTRADA
     if 'buscar_cancion' in request.form:
-        nombre_cancion = request.form['cancion']
+        nombre_cancion = request.form['cancion_buscar']
         nombre_cancion = comprimir(nombre_cancion)
         #print(nombre_cancion)
         parser = argparse.ArgumentParser(description="Process some strings or files")
