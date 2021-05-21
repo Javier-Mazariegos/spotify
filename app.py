@@ -35,18 +35,19 @@ def comprimir(n: str):
     n = n.replace(" ", "")
     return n
 @profile
-def añadirCancion(nombre,artista,album)-> None:
+def añadirCancion(nombre,artista,album,tiempo)-> None:
     global listadoCanciones, buscador_canciones
-    datos = ["","",""]
+    datos = ["","","",""]
     datos[0] = nombre
     datos[1] = artista
     datos[2] = album
+    datos[3] = tiempo
     with open('listado.csv','a',newline='') as writeFile:
         writer = csv.writer(writeFile,delimiter=",",quotechar=',',quoting=csv.QUOTE_MINIMAL,lineterminator='')
         writer.writerow('\n')
         writer.writerow(datos)
     #listaCanciones.append(Cancion(datos[0],datos[1],datos[2]))
-    can = Cancion(datos[0],datos[1],datos[2])
+    can = Cancion(datos[0],datos[1],datos[2],datos[3])
     listadoCanciones.insertar(can)
     nombrehash = comprimir(nombre)
     parser = argparse.ArgumentParser(description="Process some strings or files")
@@ -118,7 +119,7 @@ def comprobadorQueueFalse(nombreCancion):
 def eliminarCancion():
     cont = -1
     i = 0
-    lista = ["","",""]
+    lista = ["","","",""]
     cancion = listadoCanciones.head
     with open('listado.csv') as File:
         reader = csv.reader(File,delimiter=',', quotechar=',',quoting=csv.QUOTE_MINIMAL)
@@ -130,6 +131,7 @@ def eliminarCancion():
             lista[0] = cancion.nombre
             lista[1] = cancion.artista
             lista[2] = cancion.album
+            lista[3] = cancion.tiempo
             if (i != 0):
                 writer.writerow('\n')
             writer.writerow(lista)
@@ -146,7 +148,7 @@ def cargarCanciones():
             #if contador == 0:
             #    listadoCanciones.push(datos[0],datos[1],datos[2])
             #else:
-            can = Cancion(datos[0],datos[1],datos[2])
+            can = Cancion(datos[0],datos[1],datos[2],datos[3])
             listaCanciones.append(can)
             listadoCanciones.insertar(can)
             nombrehash = comprimir(can.nombre)
@@ -397,8 +399,9 @@ def añadir_cancion():
         nombre_cancion = request.form['cancion']
         artista = request.form['autor']
         album = request.form['album']
+        tiempo = request.form['tiempo']
         start_time = time.time()
-        añadirCancion(nombre_cancion,artista,album)
+        añadirCancion(nombre_cancion,artista,album,tiempo)
         print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
         start_time = time.time()
         actulizarListaCanciones()
