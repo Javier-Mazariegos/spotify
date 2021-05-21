@@ -16,6 +16,8 @@ File_loader = FileSystemLoader("templates")
 env = Environment(loader=File_loader)
 app = Flask(__name__)
 
+
+camino_corto = []
 dot = Digraph(comment='The Round Table')
 G2 = Graph()
 listadoCanciones = LinkedList()
@@ -428,6 +430,19 @@ def buscar_cancion():
             ENCONTRADA = False
             find = None
     return redirect(url_for('index'), 301)
+
+@app.route('/caminos', methods=["GET","POST"]) #<-- Ruta para encontrar el camino mas corto en el grafo 
+def caminos():
+    global G2
+    if 'caminos' in request.form:
+        camino_corto = []
+        inicio = request.form['inicio']
+        fin = request.form['fin']
+        camino_corto = G2.find_shortest_path(inicio, fin)
+        
+    return redirect(url_for('index'), 301)
+
+        
 
 # <=========================================== Rutas para hacer pruebas en jmeter ================================================================>
 
