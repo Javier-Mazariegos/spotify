@@ -1,5 +1,6 @@
 # Api que permite gestionar una playlist
-
+ ## New product speec
+   Link: https://docs.google.com/document/d/1xM-xzPGiogQg70kZrWNewa2HY9upJJ7JWWcrRQf1NgA/edit?usp=sharing
  ## Problem:
     Manejar de forma eficiente la reproducción de música, tomando en cuenta los aspecto de agregar a la fila, nueva canción, eliminar canción y reproducir canción.
     La importancia de solucionar este problema, es que los reproductores de música consumen muchos recursos. 
@@ -27,7 +28,7 @@
     Lunes 26 de abril, entrega del proyecto.  
 # Diagrama de casos de uso:
    ![image](https://user-images.githubusercontent.com/61554803/116135618-9167d500-a68e-11eb-8512-a4ad795f65eb.png)
-   Link: https://lucid.app/lucidchart/invitations/accept/5a2a3726-ce2d-4c1f-881a-db6a1518c77b
+   Link actualizado: https://lucid.app/lucidchart/invitations/accept/5a2a3726-ce2d-4c1f-881a-db6a1518c77b
 # Tiempos de funciones:
    ![image](https://user-images.githubusercontent.com/61555440/116156137-54a8d780-a6a8-11eb-895b-1e907b14d839.png)
 # Profiling
@@ -41,6 +42,7 @@
    ![image](https://user-images.githubusercontent.com/61555440/116157430-32b05480-a6aa-11eb-8026-5ee4de85da91.png)
    ![image](https://user-images.githubusercontent.com/61555440/116157529-5e333f00-a6aa-11eb-8df5-6609dbfe8411.png)
    ![image](https://user-images.githubusercontent.com/61555440/116157630-8cb11a00-a6aa-11eb-8d1e-12a34f4cea85.png)
+   Link de nuevos Profiling: https://github.com/Javier-Mazariegos/spotify/issues/1#issue-897669465
 # Video de ejecución satisfactoria con Selenium
    Link: https://youtu.be/k5fiL3FFTQ4
     
