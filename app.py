@@ -30,7 +30,7 @@ ultimaCancion = None
 buscador_canciones = {}
 ENCONTRADA = False
 find = None
-tiempo_corto = 0
+tiempo_corto = 0.0
 def comprimir(n: str):
     n = n.lower()
     n = n.replace(" ", "")
@@ -451,18 +451,22 @@ def caminos():
     global G2, tiempo_corto, colaCanciones, camino_corto
     if 'caminos' in request.form:
         camino_corto = []
-        tiempo_corto = 0
+        tiempo_corto = 0.0
         inicio = request.form['casa1']
         fin = request.form['casa2']
         camino_corto = G2.find_shortest_path(inicio, fin)
         tiempo_corto = (len(camino_corto) - 1)*5
-        tiempoCanciones = 0
+        tiempo_corto = float(tiempo_corto)
+        tiempoCanciones = 0.0
         nodo = listadoCanciones.head
-        while tiempoCanciones < tiempo_corto:
+        while float(tiempoCanciones) < float(tiempo_corto):
             llave = randint(0,1)
             if llave == 1:
-                tiempoCanciones += float(nodo.tiempo)
-                colaCanciones.enqueue(Cancion(nodo.nombre, nodo.artista, nodo.album, nodo.tiempo))
+                if ((tiempoCanciones + float(nodo.tiempo)) > tiempo_corto):
+                    break
+                else:
+                    tiempoCanciones += float(nodo.tiempo)
+                    colaCanciones.enqueue(Cancion(nodo.nombre, nodo.artista, nodo.album, nodo.tiempo))
             if nodo.next is not None:
                 nodo = nodo.next
         cola_a_Lista()
