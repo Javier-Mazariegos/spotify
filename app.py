@@ -63,7 +63,7 @@ def añadirCancion(nombre,artista,album,tiempo)-> None:
     hash_input = bytes(input_string, "utf-8")
     hash_var = (SHA1Hash(hash_input).final_hash())
     buscador_canciones[hash_var] = listadoCanciones.last()
-    comprobadorListadoTrue(datos[0])
+    #comprobadorListadoTrue(datos[0])
 
 def contadorListado(nombreCancion):
     global listadoCanciones
@@ -99,13 +99,13 @@ def contadorQueue(nombreCancion):
     return comprobacion
  
 
-def comprobadorListadoTrue(nombreCancion):
-    resultado = contadorListado(nombreCancion)
-    assert resultado == True, "Debe ser True"
+#def comprobadorListadoTrue(nombreCancion):
+#    resultado = contadorListado(nombreCancion)
+#    assert resultado == True, "Debe ser True"
 
-def comprobadorListadoFalse(nombreCancion):
-    resultado = contadorListado(nombreCancion)
-    assert resultado == False, "Debe ser False"
+#def comprobadorListadoFalse(nombreCancion):
+#    resultado = contadorListado(nombreCancion)
+#    assert resultado == False, "Debe ser False"
     
 #def comprobadorQueueTrue(nombreCancion):
 #    resultado = contadorQueue(nombreCancion)
@@ -165,7 +165,7 @@ def cargarCanciones():
             hash_input = bytes(input_string, "utf-8")
             hash_var = (SHA1Hash(hash_input).final_hash())
             buscador_canciones[hash_var] = listadoCanciones.last()
-            comprobadorListadoTrue(datos[0])
+            #comprobadorListadoTrue(datos[0])
 
 @profile
 def cola_a_Lista():
@@ -256,7 +256,7 @@ def deletelist(cancion_eliminar, cancion):
     start_time = time.time()
     eliminarCancion()
     print("Time en 'eliminarCancion': %s  seconds " %(time.time() - start_time))
-    comprobadorListadoFalse(cancion_eliminar)
+    #comprobadorListadoFalse(cancion_eliminar)
 
 
 #principal
