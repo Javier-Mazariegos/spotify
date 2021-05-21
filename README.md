@@ -44,5 +44,5 @@
    ![image](https://user-images.githubusercontent.com/61555440/116157630-8cb11a00-a6aa-11eb-8d1e-12a34f4cea85.png)
    Link de nuevos Profiling: https://github.com/Javier-Mazariegos/spotify/issues/1#issue-897669465
 # Video de ejecución satisfactoria con Selenium
-   Link: https://youtu.be/k5fiL3FFTQ4
+   Link: https://youtu.be/DycP8NvfoG4
     
