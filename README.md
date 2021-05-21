@@ -1,5 +1,6 @@
 # Api que permite gestionar una playlist
-
+ ## New product speec
+   Link: https://docs.google.com/document/d/1xM-xzPGiogQg70kZrWNewa2HY9upJJ7JWWcrRQf1NgA/edit?usp=sharing
  ## Problem:
     Manejar de forma eficiente la reproducción de música, tomando en cuenta los aspecto de agregar a la fila, nueva canción, eliminar canción y reproducir canción.
     La importancia de solucionar este problema, es que los reproductores de música consumen muchos recursos. 
