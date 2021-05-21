@@ -27,7 +27,7 @@
     Lunes 26 de abril, entrega del proyecto.  
 # Diagrama de casos de uso:
    ![image](https://user-images.githubusercontent.com/61554803/116135618-9167d500-a68e-11eb-8512-a4ad795f65eb.png)
-   Link: https://lucid.app/lucidchart/invitations/accept/5a2a3726-ce2d-4c1f-881a-db6a1518c77b
+   Link actualizado: https://lucid.app/lucidchart/invitations/accept/5a2a3726-ce2d-4c1f-881a-db6a1518c77b
 # Tiempos de funciones:
    ![image](https://user-images.githubusercontent.com/61555440/116156137-54a8d780-a6a8-11eb-895b-1e907b14d839.png)
 # Profiling
