@@ -259,6 +259,7 @@ def deletelist(cancion_eliminar, cancion):
     comprobadorListadoFalse(cancion_eliminar)
 
 
+
 #principal
 @app.route('/', methods=["GET","POST"], endpoint='index')
 @profile
@@ -480,7 +481,7 @@ def agregar_Test(test_cancion = None):
     cancion_nueva = test_cancion
     for nodo in listadoCanciones:
         if nodo.nombre == cancion_nueva:
-            n = Cancion(nodo.nombre, nodo.artista, nodo.album)
+            n = Cancion(nodo.nombre, nodo.artista, nodo.album, nodo.tiempo)
             colaCanciones.enqueue(n)
             comprobadorQueueTrue(cancion_nueva)
             break
@@ -528,8 +529,9 @@ def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,te
     nombre_cancion = test_cancion_nombre
     artista = test_cancion_autor
     album = test_cancion_album
+    tiempo = str(randint(0,5)) + ":" + str(randint(0,5)) + str(randint(0,9))
     start_time = time.time()
-    añadirCancion(nombre_cancion,artista,album)
+    añadirCancion(nombre_cancion,artista,album,tiempo)
     print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
     start_time = time.time()
     actulizarListaCanciones()
