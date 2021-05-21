@@ -270,9 +270,9 @@ def index():
     template = env.get_template('spoti.html')
     print("entre al index")
     if(cancionActual != " "):
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css, r = ENCONTRADA, find = find, foto = imgF,tiempoCancion=cancionActual.tiempo)
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css, r = ENCONTRADA, find = find, foto = imgF,tiempoCancion=cancionActual.tiempo, camino_r = camino_corto,tiempoTOTAL = tiempo_corto)
     else:
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="",style_sheet=css, r=ENCONTRADA, find = find, foto = imgF,tiempoCancion="")
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="",style_sheet=css, r=ENCONTRADA, find = find, foto = imgF,tiempoCancion="", camino_r = camino_corto, tiempoTOTAL = tiempo_corto)
 
 @app.route('/Play_Previous', methods=["GET","POST"], endpoint='Play_Previous') #<-- Ruta para cambiar a la cancion anterior
 @profile
@@ -448,7 +448,7 @@ def buscar_cancion():
 @app.route('/caminos', methods=["GET","POST"], endpoint='caminos') #<-- Ruta para encontrar el camino mas corto en el grafo 
 @profile
 def caminos():
-    global G2, tiempo_corto, colaCanciones
+    global G2, tiempo_corto, colaCanciones, camino_corto
     if 'caminos' in request.form:
         camino_corto = []
         tiempo_corto = 0

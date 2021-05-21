@@ -193,6 +193,9 @@
         <input type="text" placeholder="Inicio" name="casa1"/>
         <input type="text" placeholder="Destino" name="casa2"/> 
         <button class="botoncaminos" style="font-size:25px;"  name="caminos" onclick ="document.getElementById('formcaminos').action = '/caminos'; document.getElementById('formcaminos').submit();">Generar ruta</button>
+        <p style="color:aliceblue"> {{camino_r}} </p>
+        <p style="color:#282828;">  --------   </p>
+        <p style="color:aliceblue"> {{tiempoTOTAL}} </p>
       </form>
     </div>
   </section>
