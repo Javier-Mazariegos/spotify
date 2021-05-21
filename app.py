@@ -1,4 +1,4 @@
-from flask.helpers import url_for
+from flask.helpers import _endpoint_from_view_func, url_for
 from memory_profiler import profile
 from flask import Flask, request, redirect
 from jinja2 import Template, Environment, FileSystemLoader
@@ -274,7 +274,8 @@ def index():
     else:
         return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="",style_sheet=css, r=ENCONTRADA, find = find, foto = imgF,tiempoCancion="")
 
-@app.route('/Play_Previous', methods=["GET","POST"]) #<-- Ruta para cambiar a la cancion anterior
+@app.route('/Play_Previous', methods=["GET","POST"], endpoint='Play_Previous') #<-- Ruta para cambiar a la cancion anterior
+@profile
 def Play_Previous():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if(request.method == "POST"):
@@ -292,8 +293,9 @@ def Play_Previous():
             print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
 
-@app.route('/Play_Next', methods=["GET","POST"]) #<-- Ruta para cambiar a la siguiente cancion
-def Play_Next():
+@app.route('/Play_Next', methods=["GET","POST"], endpoint='Play_Next') #<-- Ruta para cambiar a la siguiente cancion
+@profile
+def Play_Next_():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if'Play_Next' in request.form:
         if colaCanciones.is_empty1() == True:
@@ -314,7 +316,8 @@ def Play_Next():
         print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
 
-@app.route('/play_nueva', methods=["GET","POST"]) #<-- Ruta para reproducir una cancion especifica
+@app.route('/play_nueva', methods=["GET","POST"],endpoint='Play_nueva') #<-- Ruta para reproducir una cancion especifica
+@profile
 def play_nueva():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if 'play_nueva' in request.form:
@@ -335,7 +338,8 @@ def play_nueva():
             pass
     return redirect(url_for('index'), 301)
 
-@app.route('/agregar', methods=["GET","POST"]) #<-- Ruta para agregar una cancion a la cola
+@app.route('/agregar', methods=["GET","POST"], endpoint='agregar') #<-- Ruta para agregar una cancion a la cola
+@profile
 def agregar():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if 'agregar' in request.form:
@@ -353,7 +357,8 @@ def agregar():
         print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
 
-@app.route('/play', methods=["GET","POST"]) #<-- Ruta para reproducir la primera cancion de la lista
+@app.route('/play', methods=["GET","POST"], endpoint='Play') #<-- Ruta para reproducir la primera cancion de la lista
+@profile
 def play():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if 'play' in request.form:
@@ -362,7 +367,8 @@ def play():
             ultimaCancion = cancionActual
     return redirect(url_for('index'), 301)
 
-@app.route('/delete_queue', methods=["GET","POST"]) #<-- Ruta para eliminar de la cola
+@app.route('/delete_queue', methods=["GET","POST"], endpoint='delete_queue') #<-- Ruta para eliminar de la cola
+@profile
 def delete_queue():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if 'delete_queue' in request.form:
@@ -376,7 +382,8 @@ def delete_queue():
         print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
 
-@app.route('/delete_list', methods=["GET","POST"]) #<-- Ruta para eliminar de la lista
+@app.route('/delete_list', methods=["GET","POST"], endpoint='delete_list') #<-- Ruta para eliminar de la lista
+@profile
 def delete_list():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if 'delete_list' in request.form:
@@ -393,7 +400,8 @@ def delete_list():
         print("actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
 
-@app.route('/añadir_cancion', methods=["GET","POST"]) #<-- Ruta para añadir una nueva cancion al CSV
+@app.route('/añadir_cancion', methods=["GET","POST"], endpoint='añadir_cancion') #<-- Ruta para añadir una nueva cancion al CSV
+@profile
 def añadir_cancion():
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
     if 'añadir_cancion' in request.form:
@@ -409,7 +417,8 @@ def añadir_cancion():
         print("Time en 'actulizarListaCanciones': %s  seconds " %(time.time() - start_time))
     return redirect(url_for('index'), 301)
 
-@app.route('/buscar_cancion', methods=["GET","POST"]) #<-- Ruta para buscar una cancion
+@app.route('/buscar_cancion', methods=["GET","POST"], endpoint="buscar_cancion") #<-- Ruta para buscar una cancion
+@profile
 def buscar_cancion():
     global ENCONTRADA
     if 'buscar_cancion' in request.form:
@@ -436,7 +445,8 @@ def buscar_cancion():
             find = None
     return redirect(url_for('index'), 301)
 
-@app.route('/caminos', methods=["GET","POST"]) #<-- Ruta para encontrar el camino mas corto en el grafo 
+@app.route('/caminos', methods=["GET","POST"], endpoint='caminos') #<-- Ruta para encontrar el camino mas corto en el grafo 
+@profile
 def caminos():
     global G2, tiempo_corto, colaCanciones
     if 'caminos' in request.form:
