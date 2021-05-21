@@ -187,11 +187,9 @@
     </div>
     <div class="content1">
       <form action="" method="POST" class="f" id="form1">
-        <button class="botonPlay_Previous" style="font-size:25px;" name="Play_Previous" onclick ="document.getElementById('form1').action = '/Play_Previous'; document.getElementById('form1').submit();">&#x23EE;</button>
-            <p style="color:#282828;">  --   </p>
-            <button class="botonplay1" style="font-size:25px;" name="play" onclick ="document.getElementById('form1').action = '/play'; document.getElementById('form1').submit();">&#x23F5;</button>
-            <p style="color:#282828;">  --   </p>
-            <button class="botonPlay_Next" style="font-size:25px;"  name="Play_Next" onclick ="document.getElementById('form1').action = '/Play_Next'; document.getElementById('form1').submit();">&#x23ED;</button>
+        <input type="text" placeholder="Inicio" name="casa1"/>
+        <input type="text" placeholder="Destino" name="casa2"/> 
+        <button class="botonRuta" style="font-size:25px;"  name="botonRuta" onclick ="document.getElementById('form1').action = '/Play_Next'; document.getElementById('form1').submit();">Generar ruta</button>
       </form>
     </div>
   </section>
