@@ -1,9 +1,10 @@
 
 class Cancion:
-    def __init__(self, nombre, artista, album):
+    def __init__(self, nombre, artista, album, tiem):
         self.nombre = nombre
         self.artista = artista
         self.album = album
+        self.tiempo = tiem
         self.previous = None
         self.next = None
 

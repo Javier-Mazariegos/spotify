@@ -29,6 +29,7 @@ ultimaCancion = None
 buscador_canciones = {}
 ENCONTRADA = False
 find = None
+tiempo_corto = 0
 def comprimir(n: str):
     n = n.lower()
     n = n.replace(" ", "")
@@ -433,12 +434,14 @@ def buscar_cancion():
 
 @app.route('/caminos', methods=["GET","POST"]) #<-- Ruta para encontrar el camino mas corto en el grafo 
 def caminos():
-    global G2
+    global G2, tiempo_corto
     if 'caminos' in request.form:
         camino_corto = []
-        inicio = request.form['inicio']
-        fin = request.form['fin']
+        tiempo_corto = 0
+        inicio = request.form['casa1']
+        fin = request.form['casa2']
         camino_corto = G2.find_shortest_path(inicio, fin)
+        tiempo_corto = (len(camino_corto) - 1)*5
         
     return redirect(url_for('index'), 301)
 
