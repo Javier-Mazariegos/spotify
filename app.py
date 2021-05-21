@@ -259,7 +259,6 @@ def deletelist(cancion_eliminar, cancion):
     comprobadorListadoFalse(cancion_eliminar)
 
 
-
 #principal
 @app.route('/', methods=["GET","POST"], endpoint='index')
 @profile
@@ -401,7 +400,7 @@ def añadir_cancion():
         nombre_cancion = request.form['cancion']
         artista = request.form['autor']
         album = request.form['album']
-        tiempo = str(randint(0,5)) + ":" + str(randint(0,5)) + str(randint(0,9))
+        tiempo = str(randint(0,5)) + "." + str(randint(0,5)) + str(randint(0,9))
         start_time = time.time()
         añadirCancion(nombre_cancion,artista,album,tiempo)
         print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
@@ -439,7 +438,7 @@ def buscar_cancion():
 
 @app.route('/caminos', methods=["GET","POST"]) #<-- Ruta para encontrar el camino mas corto en el grafo 
 def caminos():
-    global G2, tiempo_corto
+    global G2, tiempo_corto, colaCanciones
     if 'caminos' in request.form:
         camino_corto = []
         tiempo_corto = 0
@@ -447,7 +446,16 @@ def caminos():
         fin = request.form['casa2']
         camino_corto = G2.find_shortest_path(inicio, fin)
         tiempo_corto = (len(camino_corto) - 1)*5
-        
+        tiempoCanciones = 0
+        nodo = listadoCanciones.head
+        while tiempoCanciones < tiempo_corto:
+            llave = randint(0,1)
+            if llave == 1:
+                tiempoCanciones += float(nodo.tiempo)
+                colaCanciones.enqueue(Cancion(nodo.nombre, nodo.artista, nodo.album, nodo.tiempo))
+            if nodo.next is not None:
+                nodo = nodo.next
+        cola_a_Lista()
     return redirect(url_for('index'), 301)
 
         
@@ -529,7 +537,7 @@ def añadir_cancion_Test(test_cancion_nombre = None,test_cancion_autor = None,te
     nombre_cancion = test_cancion_nombre
     artista = test_cancion_autor
     album = test_cancion_album
-    tiempo = str(randint(0,5)) + ":" + str(randint(0,5)) + str(randint(0,9))
+    tiempo = str(randint(0,5)) + "." + str(randint(0,5)) + str(randint(0,9))
     start_time = time.time()
     añadirCancion(nombre_cancion,artista,album,tiempo)
     print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
