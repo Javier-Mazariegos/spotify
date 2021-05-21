@@ -107,13 +107,13 @@ def comprobadorListadoFalse(nombreCancion):
     resultado = contadorListado(nombreCancion)
     assert resultado == False, "Debe ser False"
     
-def comprobadorQueueTrue(nombreCancion):
-    resultado = contadorQueue(nombreCancion)
-    assert resultado == True, "Debe ser True"
+#def comprobadorQueueTrue(nombreCancion):
+#    resultado = contadorQueue(nombreCancion)
+#    assert resultado == True, "Debe ser True"
 
-def comprobadorQueueFalse(nombreCancion):
-    resultado = contadorQueue(nombreCancion)
-    assert resultado == False, "Debe ser False"
+#def comprobadorQueueFalse(nombreCancion):
+#    resultado = contadorQueue(nombreCancion)
+#    assert resultado == False, "Debe ser False"
 
 
 @profile
@@ -223,7 +223,7 @@ def deletequeue(cancion_eliminar, cancion):
     start_time = time.time()
     cola_a_Lista()
     print("Time en 'cola_a_lista': %s  seconds " %(time.time() - start_time))
-    comprobadorQueueFalse(cancion_eliminar)
+    #comprobadorQueueFalse(cancion_eliminar)
 
 
 @profile
@@ -344,7 +344,7 @@ def agregar():
             if nodo.nombre == cancion_nueva:
                 n = Cancion(nodo.nombre, nodo.artista, nodo.album, nodo.tiempo)
                 colaCanciones.enqueue(n)
-                comprobadorQueueTrue(cancion_nueva)
+                #comprobadorQueueTrue(cancion_nueva)
                 break
             else:
                 nodo = nodo.next
@@ -491,7 +491,7 @@ def agregar_Test(test_cancion = None):
         if nodo.nombre == cancion_nueva:
             n = Cancion(nodo.nombre, nodo.artista, nodo.album, nodo.tiempo)
             colaCanciones.enqueue(n)
-            comprobadorQueueTrue(cancion_nueva)
+            #comprobadorQueueTrue(cancion_nueva)
             break
         else:
             nodo = nodo.next
@@ -503,6 +503,7 @@ def agregar_Test(test_cancion = None):
 @app.route('/delete_queue_Test/<test_cancion>', methods=["GET","POST"]) #<-- Ruta para eliminar de la cola
 def delete_queue_Test(test_cancion = None):
     global cancionActual, listaCanciones, listadoCanciones, colaCanciones, ultimaCancion, colaLista
+    print(test_cancion)
     cancion_eliminar = test_cancion
     cancion = colaCanciones.head
     start_time = time.time()
@@ -574,6 +575,27 @@ def buscar_cancion_Test(nombre = None):
     else:
         ENCONTRADA = False
         find = None
+    return redirect(url_for('index'), 301)
+
+@app.route('/caminos_Test/<casa1>/<casa2>',methods=["GET","POST"])
+def caminos_test(casa1=None,casa2=None):
+    global G2, tiempo_corto, colaCanciones
+    camino_corto = []
+    tiempo_corto = 0
+    inicio = casa1
+    fin = casa2
+    camino_corto = G2.find_shortest_path(inicio, fin)
+    tiempo_corto = (len(camino_corto) - 1)*5
+    tiempoCanciones = 0
+    nodo = listadoCanciones.head
+    while tiempoCanciones < tiempo_corto:
+        llave = randint(0,1)
+        if llave == 1:
+            tiempoCanciones += float(nodo.tiempo)
+            colaCanciones.enqueue(Cancion(nodo.nombre, nodo.artista, nodo.album, nodo.tiempo))
+        if nodo.next is not None:
+            nodo = nodo.next
+    cola_a_Lista()
     return redirect(url_for('index'), 301)
 
 if __name__ == '__main__':
