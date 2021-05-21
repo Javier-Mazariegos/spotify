@@ -35,13 +35,14 @@
               <div class="tracks__heading">
               
                 <div class="tracks__heading__number">#</div>
-                
+
                 <div class="tracks__heading__title">Song</div>
               </div>
               <div class="track">
                 <div class="track__number">1</div>
                 <div class="track__title">{{find.nombre}}</div>
                 <div class="track__explicit">
+                  
                   <form id="myFormFind" action="" method="POST">
                     <button class="botonplay" id="play {{find.nombre}}" name ="play_nueva" value="{{find.nombre}}" onclick ="document.getElementById('myFormFind').action = '/play_nueva'; document.getElementById('myFormFind').submit();">PLAY</button>
                     <input type="hidden" name="play_nueva" value="{{find.nombre}}">
@@ -176,7 +177,9 @@
             <button class="botonPlay_Next" style="font-size:25px;"  name="Play_Next" onclick ="document.getElementById('form1').action = '/Play_Next'; document.getElementById('form1').submit();">&#x23ED;</button>
       </form>
           <p style="color:#282828;">  --------   </p>
-          <p style="color:aliceblue"> {{nombreCancion}} </p>      
+          <p style="color:aliceblue"> {{nombreCancion}} </p> 
+          <p style="color:#282828;">  --------   </p>
+          <p style="color:aliceblue"> {{tiempoCancion}} </p>
     </div>
     
     

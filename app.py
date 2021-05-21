@@ -10,6 +10,7 @@ from sh1 import SHA1Hash
 import argparse
 from graph import Graph
 from graphviz import Digraph
+from random import randint
 
 
 File_loader = FileSystemLoader("templates")
@@ -269,9 +270,9 @@ def index():
     template = env.get_template('spoti.html')
     print("entre al index")
     if(cancionActual != " "):
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css, r = ENCONTRADA, find = find, foto = imgF)
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion=cancionActual.nombre,style_sheet=css, r = ENCONTRADA, find = find, foto = imgF,tiempoCancion=cancionActual.tiempo)
     else:
-        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="---",style_sheet=css, r=ENCONTRADA, find = find, foto = imgF)
+        return template.render(colaLista = colaLista, listadoCanciones = listaCanciones, nombreCancion="",style_sheet=css, r=ENCONTRADA, find = find, foto = imgF,tiempoCancion="")
 
 @app.route('/Play_Previous', methods=["GET","POST"]) #<-- Ruta para cambiar a la cancion anterior
 def Play_Previous():
@@ -341,7 +342,7 @@ def agregar():
         cancion_nueva = request.form['agregar']
         for nodo in listadoCanciones:
             if nodo.nombre == cancion_nueva:
-                n = Cancion(nodo.nombre, nodo.artista, nodo.album)
+                n = Cancion(nodo.nombre, nodo.artista, nodo.album, nodo.tiempo)
                 colaCanciones.enqueue(n)
                 comprobadorQueueTrue(cancion_nueva)
                 break
@@ -399,7 +400,7 @@ def añadir_cancion():
         nombre_cancion = request.form['cancion']
         artista = request.form['autor']
         album = request.form['album']
-        tiempo = request.form['tiempo']
+        tiempo = str(randint(0,5)) + ":" + str(randint(0,5)) + str(randint(0,9))
         start_time = time.time()
         añadirCancion(nombre_cancion,artista,album,tiempo)
         print("Time en 'añadirCancion': %s  seconds " %(time.time() - start_time))
